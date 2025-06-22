@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity Water Game Over</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header-bar">
+        <h1 class="text-white text-xl md:text-2xl">CHARITY: WATER</h1>
+        <!-- No timer or other elements needed in endgame header based on wireframe -->
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <p class="endgame-text text-blue-300 text-5xl md:text-6xl lg:text-7xl">Watter Cans: <span id="bottlesCount">4</span></p>
+            <p class="endgame-text text-blue-300 text-5xl md:text-6xl lg:text-7xl">Droplets: <span id="dropletsCount">2</span></p>
+
+            <div class="endgame-buttons">
+                <a href="game.html" class="replay-button">
+                    <!-- Replay icon SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903-1.903a.75.75 0 0 0-1.06-1.06L16.5 5.106a7.5 7.5 0 0 1-9.888 1.546l-1.455-1.455a.75.75 0 0 0-1.06 1.06l1.903 1.903Zm-3.141 6.947a.75.75 0 0 0 1.061.01L5.95 14.549a7.5 7.5 0 0 1 9.351 1.77l1.903 1.903a.75.75 0 0 0 1.06-1.06l-1.903-1.903a7.5 7.5 0 0 1-12.548 3.364l-1.903 1.903a.75.75 0 0 0 1.06 1.06L7.5 18.894a7.5 7.5 0 0 1 4.866-10.732V12a.75.75 0 0 0 1.5 0V6.25a.75.75 0 0 0-.75-.75H9.75a.75.75 0 0 0 0 1.5h1.748l.007.004a7.5 7.5 0 0 1-3.308 1.636.75.75 0 0 0-.007 1.49l-.004-.002L3.064 16.985a.75.75 0 0 0 .011 1.061Z" clip-rule="evenodd" />
+                    </svg>
+                    REPLAY GAME
+                </a>
+                <a href="index.html" class="end-game-button">
+                    END GAME
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bar"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Retrieve actual game results from localStorage
+            const gameResults = localStorage.getItem('gameResults');
+            
+            if (gameResults) {
+                const results = JSON.parse(gameResults);
+                
+                // Display actual results from the game
+                document.getElementById('bottlesCount').textContent = results.waterCans;
+                document.getElementById('dropletsCount').textContent = results.droplets;
+                
+                console.log('Game Results:', results);
+                
+                // Clear the stored results after displaying them
+                localStorage.removeItem('gameResults');
+            } else {
+                // Fallback values if no game data is found
+                console.log('No game results found, using default values');
+                document.getElementById('bottlesCount').textContent = 0;
+                document.getElementById('dropletsCount').textContent = 0;
+            }
+        });
+    </script>
+</body>
+</html>

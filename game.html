@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charity Water Game</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="styles.css"> <!-- Assuming styles.css is now style.css -->
+</head>
+<body>
+    <div class="header-bar">
+        <h1 class="text-white text-xl md:text-2xl">CHARITY: WATER</h1>
+        <div class="timer text-white text-xl md:text-2xl">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 inline-block align-middle mr-1">
+                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 .195.484l3 3a.75.75 0 0 0 1.06-1.06L13.5 11.25V6Z" clip-rule="evenodd" />
+            </svg>
+            <span id="gameTimer">1:25</span>
+        </div>
+    </div>
+
+    <div class="game-container" id="gameArea">
+        <!-- Glass positioned in the game area -->
+        <div class="glass-container">
+            <img src="img/water-can-transparent.png" alt="Water Can" class="glass-in-game">
+            <div class="glass-counter" id="dropletsCount">0</div>
+        </div>
+        <!-- Droplets will be dynamically added here by JavaScript -->
+    </div>
+
+    <div class="footer-bar">
+        <div id="achievementLogos" class="achievement-logos">
+            <!-- CW logos will be dynamically added here for every 10 droplets -->
+        </div>
+    </div>
+
+    <!-- The anchor tag from your starter code, hidden and used for navigation -->
+    <a href="endGame.html" id="endGameLink" class="hidden"></a>
+
+    <!-- Link to external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
