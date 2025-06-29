@@ -17,8 +17,14 @@
 
     <div class="container">
         <div class="main-content">
-            <p class="endgame-text text-blue-300 text-5xl md:text-6xl lg:text-7xl">Watter Cans: <span id="bottlesCount">4</span></p>
+            <!-- Success/Failure message will be displayed here -->
+            <div id="resultMessage" class="mb-8 text-center">
+                <!-- Message will be set by JavaScript -->
+            </div>
+            
+            <p class="endgame-text text-blue-300 text-5xl md:text-6xl lg:text-7xl">Water Cans: <span id="bottlesCount">4</span></p>
             <p class="endgame-text text-blue-300 text-5xl md:text-6xl lg:text-7xl">Droplets: <span id="dropletsCount">2</span></p>
+            <p class="endgame-text text-blue-300 text-3xl md:text-4xl lg:text-5xl">Target: <span id="targetCount">10</span> water cans</p>
 
             <div class="endgame-buttons">
                 <a href="game.html" class="replay-button">
@@ -48,8 +54,39 @@
                 // Display actual results from the game
                 document.getElementById('bottlesCount').textContent = results.waterCans;
                 document.getElementById('dropletsCount').textContent = results.droplets;
+                document.getElementById('targetCount').textContent = results.targetCount;
+                
+                // Check if the user met the target and display appropriate message
+                const resultMessageDiv = document.getElementById('resultMessage');
+                
+                if (results.waterCans >= results.targetCount) {
+                    // Success message
+                    resultMessageDiv.innerHTML = `
+                        <h2 class="text-green-400 text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+                            🎉 CONGRATULATIONS! 🎉
+                        </h2>
+                        <p class="text-green-300 text-xl md:text-2xl">
+                            You successfully collected ${results.waterCans} water cans!<br>
+                            You met the target of ${results.targetCount} water cans!
+                        </p>
+                    `;
+                } else {
+                    // Failure message
+                    const shortfall = results.targetCount - results.waterCans;
+                    resultMessageDiv.innerHTML = `
+                        <h2 class="text-red-400 text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+                             ALMOST THERE! 
+                        </h2>
+                        <p class="text-red-300 text-xl md:text-2xl">
+                            You collected ${results.waterCans} water cans.<br>
+                            You needed ${shortfall} more to reach the target of ${results.targetCount}.<br>
+                            Try again to help more people get clean water!
+                        </p>
+                    `;
+                }
                 
                 console.log('Game Results:', results);
+                console.log(`Target met: ${results.waterCans >= results.targetCount}`);
                 
                 // Clear the stored results after displaying them
                 localStorage.removeItem('gameResults');
@@ -58,6 +95,18 @@
                 console.log('No game results found, using default values');
                 document.getElementById('bottlesCount').textContent = 0;
                 document.getElementById('dropletsCount').textContent = 0;
+                document.getElementById('targetCount').textContent = 10;
+                
+                // Default failure message
+                const resultMessageDiv = document.getElementById('resultMessage');
+                resultMessageDiv.innerHTML = `
+                    <h2 class="text-red-400 text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+                         NO GAME DATA 
+                    </h2>
+                    <p class="text-red-300 text-xl md:text-2xl">
+                        No game results were found. Please play the game first!
+                    </p>
+                `;
             }
         });
     </script>

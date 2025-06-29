@@ -186,11 +186,15 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(gameInterval);
         clearInterval(dropletGenerationInterval);
         
+        // Get the target count for this game
+        const targetCount = parseInt(localStorage.getItem('gameTargetCount')) || 10;
+        
         // Save game results to pass to end game page
         const waterCans = Math.floor(dropletsCollected / 10); // 1 water can per 10 droplets
         localStorage.setItem('gameResults', JSON.stringify({
             waterCans: waterCans,
             droplets: dropletsCollected,
+            targetCount: targetCount,
             totalTime: 90, // Original time limit
             timeUsed: 90 - timeInSeconds
         }));

@@ -12,6 +12,7 @@
 <body>
     <div class="header-bar">
         <h1 class="text-white text-xl md:text-2xl">CHARITY: WATER</h1>
+        <p>Try to capture at least <span id="targetCount">10</span> water cans!</p> 
         <div class="timer text-white text-xl md:text-2xl">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 inline-block align-middle mr-1">
                 <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6a.75.75 0 0 0 .195.484l3 3a.75.75 0 0 0 1.06-1.06L13.5 11.25V6Z" clip-rule="evenodd" />
@@ -40,5 +41,37 @@
 
     <!-- Link to external JavaScript file -->
     <script src="script.js"></script>
+    
+    <!-- Script to set difficulty-based target count -->
+    <script>
+        // Set target count based on selected difficulty
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the selected difficulty from localStorage
+            const difficulty = localStorage.getItem('gameDifficulty') || 'medium';
+            const targetCountElement = document.getElementById('targetCount');
+            
+            let targetCount;
+            // Set target count based on difficulty
+            if (difficulty === 'easy') {
+                targetCount = 5; // Easy: collect 5 water cans
+            } else if (difficulty === 'medium') {
+                targetCount = 10; // Medium: collect 10 water cans
+            } else if (difficulty === 'hard') {
+                targetCount = 15; // Hard: collect 15 water cans
+            } else if (difficulty === 'free') {
+                targetCount = 0; // Free: no target, just play for fun
+            } else {
+                targetCount = 0; // Default to free
+            }
+            
+            // Update the display
+            targetCountElement.textContent = targetCount;
+            
+            // Store the target count so the game script can access it
+            localStorage.setItem('gameTargetCount', targetCount);
+            
+            console.log(`Game difficulty: ${difficulty}, Target count: ${targetCount}`);
+        });
+    </script>
 </body>
 </html>
