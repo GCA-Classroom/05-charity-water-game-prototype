@@ -13,3 +13,205 @@ Secondary Colors:
 - Pink:       #F16061
 
 */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap');
+
+body {
+  text-align: center;
+  font-size: 1.5rem;
+  font-family: 'Montserrat', 'Open Sans', Arial, Helvetica, sans-serif;
+  background: #2E9DF7;
+  margin: 0;
+  padding: 0;
+}
+
+h1, #game-info, #score, #timer, #message, label, select, button {
+  text-align: center;
+  font-size: 2rem;
+  font-family: 'Montserrat', 'Open Sans', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+#game-container {
+  margin: 2em auto;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#game-area {
+  margin: 0 auto;
+  width: 600px;
+  height: 600px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  border: 3px solid #000; /* Add a black border for a cleaner look */
+}
+
+button, select {
+  font-size: 1.2rem;
+  padding: 0.5em 1em;
+  margin: 0.5em;
+}
+
+#start-btn, #stop-btn, #reset-btn {
+  display: inline-block;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  align-self: flex-end;
+}
+
+#progress-bar-container {
+  width: 100%;
+  margin: 1em 0;
+}
+
+#score-sidebar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+#message {
+  margin: 1em 0 0.5em 0; /* Give a balanced top margin for all messages */
+  font-weight: bold;
+  text-align: center; /* Center the text horizontally */
+  width: 100%;
+  min-height: 2.2em;
+  /* Ensures message is always visible and aligned with sidebar content */
+  box-sizing: border-box;
+  max-width: 320px;
+  margin-left: 0;
+  align-self: center; /* Center the message div in the flex column */
+}
+
+@media (min-width: 700px) {
+  #score-sidebar-wrapper {
+    max-width: 320px;
+  }
+  #message {
+    max-width: 320px;
+  }
+}
+
+.grid-cell {
+  border: 1px solid #000; /* Black border for each grid cell */
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  background: rgba(249, 249, 249, 0.7);
+}
+
+.jerrycan {
+  background: #ffe066;
+  font-size: 24px;
+  font-weight: bold;
+  border-radius: 50%; /* Make the jerrycan cell circular */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid #FFC907; /* Optional: yellow border for emphasis */
+}
+
+.jerrycan img {
+  border-radius: 50%; /* Make the image itself circular */
+  display: block;
+}
+
+.corrupted-water {
+  background: #F5402C;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #F5402C;
+}
+
+.water {
+  background: #b3e6ff;
+  border-radius: 50%; /* Make the water droplet cell circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#score-sidebar {
+  background: #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 1.5em 2em;
+  margin-left: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 160px;
+  border: 3px solid #000; /* Add a black border for a cleaner look */
+}
+
+#score-box, #corrupted-box {
+  font-size: 1.3rem;
+  font-family: 'Montserrat', 'Open Sans', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  margin-bottom: 1em;
+  display: flex;
+  align-items: center;
+}
+
+#sidebar-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  margin-top: 1em;
+}
+
+#sidebar-buttons button {
+  margin: 0.3em 0;
+  width: 100%;
+  align-self: stretch;
+}
+
+#score-label, #corrupted-label {
+  margin-right: 0.5em;
+}
+
+#corrupted-marker {
+  color: #F5402C;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+#score {
+  color: #2E9DF7;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+#logo-row {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  margin-top: 1.5em; /* Add space above logo */
+  margin-bottom: 0.5em;
+}
+
+#cw-logo {
+  height: 48px;
+  width: auto;
+  margin-left: 0;
+}

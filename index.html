@@ -3,11 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Game</title>
+    <title>Charity: Water Game Prototype</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome to the Charity Water Game Prototype</h1>
+    <div id="game-container">
+        <h1>"Collect 50 water droplets while avoiding 5 corrupted droplets!"</h1>
+        <!-- Progress bar for jerry can fill -->
+        <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+        </div>
+        <!-- Main game area and sidebar -->
+        <div style="display: flex; align-items: flex-start; justify-content: center;">
+            <div id="game-area">
+                <!-- Jerry can and droplets will be added here by JavaScript -->
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                <div id="score-sidebar">
+                    <div id="score-box">
+                        <span id="score-label">💧 Water: </span><span id="score">0</span>
+                    </div>
+                    <div id="corrupted-box">
+                        <span id="corrupted-label">🦠 Corrupted: </span><span id="corrupted-marker">0</span>
+                    </div>
+                    <div id="sidebar-buttons">
+                        <button id="start-btn">Start</button>
+                        <button id="stop-btn" style="display:none;">Stop</button>
+                        <button id="reset-btn" style="display:inline-block;">Reset</button>
+                    </div>
+                    <div id="logo-row">
+                        <img id="cw-logo" src="img/cw_logo_horizontal.png" alt="charity: water logo">
+                    </div>
+                </div>
+                <!-- Message area for win/lose or milestone messages, now directly below the sidebar -->
+                <div id="message"></div>
+            </div>
+        </div>
+        <!-- Difficulty selector (optional, can be hidden at first) -->
+        <div id="difficulty-select" style="display:none;">
+            <label for="difficulty">Select Difficulty:</label>
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
