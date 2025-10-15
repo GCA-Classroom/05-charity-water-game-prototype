@@ -13,3 +13,778 @@ Secondary Colors:
 - Pink:       #F16061
 
 */
+
+/* Reset and basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px; /* Add padding so game doesn't touch screen edges */
+}
+
+/* Main game container - responsive width */
+.game-container {
+    background: linear-gradient(180deg, #7eb3e6 0%, #5a9dd5 100%);
+    border-radius: 40px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 500px; /* Maximum width for desktop */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Stats container at the top */
+.stats-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.stat-box {
+    flex: 1;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    min-width: 0; /* Allows flex items to shrink below content size */
+}
+
+.stat-label {
+    font-size: 18px;
+    color: #4a90e2;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.money-box .stat-label {
+    color: #f5a623;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: bold;
+    color: #2c3e50;
+    word-break: break-word; /* Prevent overflow on small screens */
+}
+
+/* Game visual area */
+.game-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 40px 0;
+    min-height: 300px;
+    position: relative; /* Position for absolute children */
+}
+
+.faucet {
+    font-size: 80px;
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 3; /* Faucet on top */
+}
+
+.water-drop {
+    font-size: 40px;
+    position: absolute;
+    top: 90px; /* Position below faucet */
+    z-index: 2; /* Water drop in middle */
+    animation: drop 2s ease-in infinite;
+}
+
+/* Updated animation to fall into jerry can */
+@keyframes drop {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(140px); /* Falls into jerry can */
+        opacity: 0;
+    }
+}
+
+.jerry-can {
+    font-size: 120px;
+    margin-top: 20px;
+}
+
+/* New style for jerry can image - keep original yellow color */
+.jerry-can-img {
+    width: 150px;
+    height: auto;
+    margin-top: 50px; /* Space from water drop path */
+    position: relative;
+    z-index: 1; /* Jerry can behind water drop */
+    /* Remove border-radius to let the blue background blend naturally */
+    /* Add soft shadow to blend with background without changing color */
+    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.25));
+}
+
+/* Fill progress bar - now appears above faucet */
+.fill-progress {
+    width: 150px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    margin-bottom: 10px; /* Space below progress bar */
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fill-bar {
+    height: 100%;
+    width: 0%; /* Start empty */
+    background: linear-gradient(90deg, #4FCB53 0%, #159A48 100%);
+    border-radius: 10px;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+/* Red color when overflowing */
+.fill-bar.overflow {
+    background: linear-gradient(90deg, #F5402C 0%, #d63027 100%);
+}
+
+.fill-label {
+    margin-bottom: 15px; /* Space below label before faucet */
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Switch Jerry Can button */
+.switch-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #ffd93d 0%, #f7b731 100%);
+    color: #2c3e50;
+    border: none;
+    border-radius: 30px;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 30px;
+    /* Make button easier to tap on mobile */
+    min-height: 60px;
+    touch-action: manipulation; /* Prevents zoom on double-tap */
+}
+
+.switch-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.switch-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Bottom control icons */
+.control-icons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap; /* Allow icons to wrap on very small screens */
+}
+
+.control-btn {
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
+    touch-action: manipulation; /* Prevents zoom on double-tap */
+}
+
+.control-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.control-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.control-btn .icon {
+    font-size: 32px;
+    color: #4a90e2;
+}
+
+/* Timer and overflow counter */
+.game-info {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    flex: 1; /* Allow items to grow equally */
+    justify-content: center; /* Center content */
+}
+
+.info-icon {
+    font-size: 24px;
+}
+
+.info-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Game Over Screen */
+.game-over-screen {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.game-over-screen.active {
+    display: flex; /* Show when game ends */
+}
+
+.game-over-content {
+    background: linear-gradient(180deg, #7eb3e6 0%, #5a9dd5 100%);
+    border-radius: 40px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    width: 90%;
+}
+
+.game-over-title {
+    font-size: 48px;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.game-over-message {
+    font-size: 20px;
+    color: white;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.final-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.final-stat {
+    flex: 1;
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.final-label {
+    font-size: 14px;
+    color: #4a90e2;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.final-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.play-again-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #ffd93d 0%, #f7b731 100%);
+    color: #2c3e50;
+    border: none;
+    border-radius: 30px;
+    padding: 18px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.play-again-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.play-again-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Celebration Animation */
+.celebration {
+    display: none; /* Hidden by default */
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.celebration.active {
+    display: block;
+}
+
+/* Champagne bottle that pops */
+.champagne-bottle {
+    font-size: 80px;
+    animation: champagnePop 1s ease-out forwards;
+}
+
+@keyframes champagnePop {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-30px) rotate(20deg);
+    }
+    100% {
+        transform: translateY(-60px) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+/* Confetti container */
+.confetti-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    pointer-events: none;
+}
+
+/* Individual confetti piece */
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #FFC907;
+    top: -10px;
+    left: 50%;
+    animation: confettiFall 2s ease-out forwards;
+}
+
+/* Different colors for confetti */
+.confetti:nth-child(2n) {
+    background: #2E9DF7;
+}
+
+.confetti:nth-child(3n) {
+    background: #4FCB53;
+}
+
+.confetti:nth-child(4n) {
+    background: #FF902A;
+}
+
+.confetti:nth-child(5n) {
+    background: #F16061;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(300px) translateX(var(--confetti-x)) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Tablet screens (portrait) */
+@media (max-width: 768px) {
+    .game-container {
+        border-radius: 30px;
+        padding: 30px 20px;
+    }
+    
+    .stat-label {
+        font-size: 16px;
+    }
+    
+    .stat-value {
+        font-size: 28px;
+    }
+    
+    .faucet {
+        font-size: 70px;
+    }
+    
+    .water-drop {
+        font-size: 35px;
+        top: 80px;
+    }
+    
+    @keyframes drop {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        70% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(120px);
+            opacity: 0;
+        }
+    }
+    
+    .jerry-can {
+        font-size: 100px;
+    }
+    
+    /* Adjust jerry can image size for tablets */
+    .jerry-can-img {
+        width: 130px;
+        margin-top: 40px;
+    }
+    
+    .fill-progress {
+        width: 130px;
+        height: 18px;
+        margin-bottom: 8px;
+    }
+    
+    .fill-label {
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+    
+    .switch-btn {
+        font-size: 20px;
+        padding: 18px;
+    }
+    
+    .control-btn {
+        width: 65px;
+        height: 65px;
+    }
+    
+    .control-btn .icon {
+        font-size: 28px;
+    }
+    
+    .game-info {
+        margin-bottom: 25px;
+        gap: 15px;
+    }
+    
+    .info-item {
+        padding: 8px 15px;
+    }
+    
+    .info-icon {
+        font-size: 20px;
+    }
+    
+    .info-text {
+        font-size: 14px;
+    }
+    
+    .game-over-title {
+        font-size: 40px;
+    }
+    
+    .game-over-message {
+        font-size: 18px;
+    }
+}
+
+/* Mobile phones (portrait) */
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .game-container {
+        border-radius: 20px;
+        padding: 20px 15px;
+    }
+    
+    .stats-container {
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+    
+    .stat-box {
+        padding: 15px;
+        border-radius: 15px;
+    }
+    
+    .stat-label {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+    
+    .stat-value {
+        font-size: 24px;
+    }
+    
+    .game-visual {
+        margin: 30px 0;
+        min-height: 250px;
+    }
+    
+    .faucet {
+        font-size: 60px;
+    }
+    
+    .water-drop {
+        font-size: 35px;
+        top: 70px;
+    }
+    
+    @keyframes drop {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        70% {
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100px);
+            opacity: 0;
+        }
+    }
+    
+    .jerry-can {
+        font-size: 90px;
+    }
+    
+    /* Adjust jerry can image size for mobile */
+    .jerry-can-img {
+        width: 110px;
+        margin-top: 35px;
+    }
+    
+    .fill-progress {
+        width: 110px;
+        height: 16px;
+        margin-bottom: 6px;
+    }
+    
+    .fill-label {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+    
+    .switch-btn {
+        font-size: 18px;
+        padding: 16px;
+        border-radius: 25px;
+        margin-bottom: 25px;
+    }
+    
+    .control-icons {
+        gap: 20px;
+    }
+    
+    .control-btn {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .control-btn .icon {
+        font-size: 26px;
+    }
+    
+    .game-info {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .info-item {
+        padding: 10px 15px; /* Increased padding for better touch target */
+        justify-content: center;
+        width: 100%; /* Full width on mobile */
+    }
+    
+    .info-icon {
+        font-size: 20px; /* Slightly larger for mobile */
+    }
+    
+    .info-text {
+        font-size: 14px; /* Increased from 13px for better readability */
+    }
+    
+    .game-over-content {
+        padding: 30px 20px;
+        width: 95%; /* Use more screen width on mobile */
+    }
+    
+    .game-over-title {
+        font-size: 32px;
+    }
+    
+    .game-over-message {
+        font-size: 16px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+    .stat-label {
+        font-size: 12px;
+    }
+    
+    .stat-value {
+        font-size: 20px;
+    }
+    
+    .switch-btn {
+        font-size: 16px;
+    }
+    
+    .control-icons {
+        gap: 15px;
+    }
+    
+    .control-btn {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .control-btn .icon {
+        font-size: 24px;
+    }
+    
+    /* Adjust jerry can image size for very small phones */
+    .jerry-can-img {
+        width: 90px;
+        margin-top: 30px;
+    }
+    
+    .fill-progress {
+        width: 90px;
+        height: 14px;
+        margin-bottom: 5px;
+    }
+    
+    .fill-label {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+    
+    .info-item {
+        padding: 8px 12px;
+    }
+    
+    .info-icon {
+        font-size: 18px;
+    }
+    
+    .info-text {
+        font-size: 12px;
+    }
+    
+    .game-over-title {
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+    
+    .game-over-message {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    
+    .final-label {
+        font-size: 12px;
+    }
+    
+    .final-value {
+        font-size: 24px;
+    }
+    
+    .play-again-btn {
+        font-size: 16px;
+        padding: 14px;
+    }
+}
+
+/* Landscape mode adjustments for small devices */
+@media (max-height: 600px) and (orientation: landscape) {
+    .game-container {
+        padding: 20px 15px;
+        max-width: 600px;
+    }
+    
+    .stats-container {
+        margin-bottom: 20px;
+    }
+    
+    .game-info {
+        flex-direction: row;
+        margin-bottom: 15px;
+    }
+    
+    .game-visual {
+        margin: 20px 0;
+        min-height: 200px;
+    }
+    
+    .game-over-content {
+        padding: 25px 30px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .game-over-title {
+        font-size: 36px;
+        margin-bottom: 15px;
+    }
+    
+    .final-stats {
+        flex-direction: row;
+    }
+}
