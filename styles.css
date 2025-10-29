@@ -13,3 +13,131 @@ Secondary Colors:
 - Pink:       #F16061
 
 */
+body {
+  text-align: center;
+  background: linear-gradient(to bottom, #8fd3f4, #84fab0);
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+h1 {
+  font-size: 2em;
+  margin-top: 1rem;
+}
+
+#score, #lives {
+  font-size: 1.2em;
+}
+
+#gameArea {
+  position: relative;
+  width: 80vw;
+  max-width: 400px;
+  height: 60vh;
+  margin: 2vh auto;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid #fff;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.raindrop {
+  position: absolute;
+  width: 6%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  top: 0;
+}
+
+.blue {
+  background-color: #4fc3f7;
+}
+
+.grey {
+  background-color: #757575;
+}
+
+#bucket {
+  position: absolute;
+  bottom: 2%;
+  left: 45%;
+  width: 12%;
+  aspect-ratio: 5 / 3;
+  background: #FFC907;
+  border-radius: 8px;
+}
+
+#startButton {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  background: #159A48;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.3s ease;
+}
+
+#startButton:hover {
+  background: #0c6f34;
+}
+
+.scoreBar {
+  position: relative;
+  width: 70vw;
+  max-width: 300px;
+  height: 20px;
+  background: #d3d3d3;
+  border-radius: 15px;
+  margin: 10px auto;
+  overflow: hidden;
+  border: 2px solid white;
+}
+
+#scoreFill {
+  position: absolute;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #00c853, #64dd17);
+  transition: width 0.3s ease;
+}
+
+footer {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid white;
+}
+
+footer a {
+  color: #FFC907;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* 📱 Small screens */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.5em;
+  }
+
+  #gameArea {
+    height: 50vh;
+  }
+
+  #bucket {
+    width: 15%;
+  }
+
+  #startButton {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+}

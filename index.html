@@ -1,13 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Game</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protect Water Game</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Charity: water brand font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Welcome to the Charity Water Game Prototype</h1>
-    <script src="script.js"></script>
+  <h1>Protect Water</h1>
+  <p id="score">Score: 0</p>
+  <p id="lives">Lives: 3</p>
+
+  <div class="scoreBar">
+    <div id="scoreFill"></div>
+  </div>
+
+  <label for="difficulty">Difficulty:</label>
+  <select id="difficulty">
+    <option value="easy">Easy</option>
+    <option value="normal" selected>Normal</option>
+    <option value="hard">Hard</option>
+  </select>
+
+  <div id="gameArea">
+    <div id="bucket"></div>
+  </div>
+
+  <button id="startButton">Start</button>
+
+  <footer>
+    <p>
+      Learn more about <a href="https://www.charitywater.org" target="_blank">charity: water</a> |
+      <a href="https://www.charitywater.org/donate" target="_blank">Donate Now 💧</a>
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
+
