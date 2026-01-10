@@ -3,11 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Game</title>
+    <title>Charity: Water</title>
+    <!-- Tailwind CSS CDN for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Link to external stylesheet -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome to the Charity Water Game Prototype</h1>
-    <script src="script.js"></script>
+    <div class="header-bar">
+        <h1 class="text-white text-2xl md:text-3xl">CHARITY: WATER</h1>
+    </div>
+
+    <div class="container flex-grow">
+        <div class="main-content">
+            <h2 class="text-blue-300 text-5xl md:text-6xl lg:text-7xl font-bold mb-10">GET WATER</h2>
+            <a href="game.html" class="start-button" id="startGameBtn">
+                <!-- Play icon SVG -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.561 0 3.273L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" />
+                </svg>
+                START GAME
+            </a>
+            
+            <!-- Difficulty selection buttons (initially hidden) -->
+            <div id="difficultyButtons" class="hidden mt-8">
+                <h3 class="text-blue-300 text-2xl font-bold mb-4 text-center">Choose Difficulty:</h3>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="difficulty-btn bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 min-w-[120px]" onclick="startGame('easy')">
+                        EASY
+                    </button>
+                    <button class="difficulty-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 min-w-[120px]" onclick="startGame('medium')">
+                        MEDIUM
+                    </button>
+                    <button class="difficulty-btn bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 min-w-[120px]" onclick="startGame('hard')">
+                        HARD
+                    </button>
+                    <button class="difficulty-btn bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 min-w-[120px]" onclick="startGame('free')">
+                        FREE GAME
+                    </button>
+                </div>
+            </div>
+            
+            <p class="text-center text-blue-300 max-w-md mx-auto mt-6 text-lg leading-relaxed">You have 90 seconds to capture as many water droplets as possible. Move the water can left and right using your mouse or arrow keys and try to capture all the water droplets while avoiding the oil droplets.</p>
+        </div>
+    </div>
+
+    <div class="footer-bar"></div>
+    
+    <!-- JavaScript for difficulty selection -->
+    <script>
+        // Get references to the buttons
+        const startGameBtn = document.getElementById('startGameBtn');
+        const difficultyButtons = document.getElementById('difficultyButtons');
+        
+        // Add click event to start game button
+        startGameBtn.addEventListener('click', function(event) {
+            // Prevent the default link behavior
+            event.preventDefault();
+            
+            // Hide the start game button
+            startGameBtn.style.display = 'none';
+            
+            // Show the difficulty buttons
+            difficultyButtons.classList.remove('hidden');
+        });
+        
+        // Function to start the game with selected difficulty
+        function startGame(difficulty) {
+            // Store the selected difficulty in localStorage so the game can access it
+            localStorage.setItem('gameDifficulty', difficulty);
+            
+            // Navigate to the game page
+            window.location.href = 'game.html';
+        }
+    </script>
 </body>
 </html>

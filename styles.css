@@ -1,15 +1,283 @@
-/* Charity: water Brand Colors
+/* Custom styles for the game's aesthetic */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #1a2a4b; /* Dark blue background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    flex-direction: column;
+    color: #ffffff; /* White text for contrast */
+}
+.container {
+    background-color: #1a2a4b; /* Same dark blue for content area */
+    border: 2px solid #facc15; /* Yellow border matching wireframe */
+    border-radius: 1rem; /* Rounded corners */
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    max-width: 600px; /* Max width for larger screens */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    flex-grow: 1; /* Allow container to grow in height on smaller screens */
+}
+.header-bar {
+    width: 100%;
+    background-color: #0d1b33; /* Even darker blue for header/footer bars */
+    border-bottom: 2px solid #facc15; /* Yellow border */
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    border-radius: 1rem 1rem 0 0; /* Rounded top corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    display: flex; /* Use flexbox for alignment */
+    justify-content: space-between; /* Space out items */
+    align-items: center;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+.footer-bar {
+    width: 100%;
+    background-color: #0d1b33; /* Even darker blue for header/footer bars */
+    border-top: 2px solid #facc15; /* Yellow border */
+    padding: 1rem 0;
+    margin-top: 1rem;
+    border-radius: 0 0 1rem 1rem; /* Rounded bottom corners */
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+    display: flex; /* Use flexbox for alignment */
+    justify-content: flex-start; /* Align items to the start */
+    align-items: center;
+    padding-left: 1rem;
+}
+.main-content {
+    flex-grow: 1; /* Allows content to take up available space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 2rem 0;
+}
+.start-button {
+    background-color: #facc15; /* Yellow background for button */
+    color: #1a2a4b; /* Dark blue text for button */
+    padding: 0.75rem 2rem;
+    border-radius: 9999px; /* Fully rounded pill shape */
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-decoration: none; /* Remove underline from link */
+    transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effects */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Button shadow */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #facc15; /* Matching yellow border */
+}
+.start-button:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Larger shadow on hover */
+}
+.start-button svg {
+    margin-right: 0.5rem;
+}
 
-Primary Colors:
-- Yellow:     #FFC907
-- Blue:       #2E9DF7
+/* Styles specific to game.html */
+.game-container {
+    background-color: #fce4ce; /* Light peach background for game area */
+    border: 2px solid #facc15; /* Yellow border */
+    border-radius: 1rem;
+    width: 100%; /* Full width of the screen */
+    height: 60vh; /* Set a height for the game area, adjust as needed */
+    margin: 1rem 0; /* Remove auto margin to allow full width */
+    position: relative; /* For positioning droplets */
+    overflow: hidden; /* Ensure droplets don't overflow */
+}
 
-Secondary Colors:
-- Light Blue: #8BD1CB
-- Green:      #4FCB53
-- Orange:     #FF902A
-- Red:        #F5402C
-- Dark Green: #159A48
-- Pink:       #F16061
+.droplet {
+    position: absolute;
+    width: 30px; /* Size of the droplet */
+    height: 30px;
+    background-color: #63b3ed; /* Light blue droplet color */
+    border-radius: 50% 50% 50% 0; /* Tear-drop shape */
+    transform: rotate(135deg);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.1s ease-out; /* For click animation */
+    /* Animation for falling droplets */
+    animation: fall linear forwards;
+}
 
-*/
+/* Animation keyframes for droplets falling */
+@keyframes fall {
+    from {
+        top: -10px; /* Start above the container */
+    }
+    to {
+        top: 100%; /* Fall to bottom of container */
+    }
+}
+
+.droplet.dark {
+    background-color: #3b4252; /* Darker droplet color */
+}
+
+.droplet:active {
+    transform: rotate(45deg) scale(0.9); /* Shrink slightly on click */
+}
+
+.glass-icon {
+    width: 60px; /* Size of the glass icon */
+    height: auto;
+    margin-right: 1rem;
+}
+
+/* Glass positioned in game container */
+.glass-container {
+    position: absolute;
+    bottom: 20px; /* Position from bottom of game container */
+    left: 50%; /* Center horizontally (will be updated by JavaScript) */
+    transform: translateX(-50%); /* Center the glass perfectly */
+    z-index: 10; /* Make sure it's above droplets */
+    transition: left 0.1s ease-out; /* Smooth movement */
+    cursor: pointer; /* Show it's interactive */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.glass-in-game {
+    width: 80px; /* Slightly larger in the game area */
+    height: auto;
+}
+
+.glass-counter {
+    background-color: #facc15; /* Yellow background to match theme */
+    color: #1a2a4b; /* Dark blue text */
+    border: 2px solid #1a2a4b;
+    border-radius: 50%; /* Circular counter */
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.droplet-icon-small {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.25rem;
+    vertical-align: middle;
+    /* Make sure CW logos display properly */
+    object-fit: contain;
+}
+
+/* Achievement logos styles */
+.achievement-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: 100%;
+    min-height: 60px;
+    padding: 0.5rem;
+}
+
+.achievement-logo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: scale(0.5);
+    animation: logoAppear 0.5s ease-out forwards;
+}
+
+@keyframes logoAppear {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.cw-achievement-logo {
+    width: 50px;
+    height: auto;
+    margin-bottom: 0.25rem;
+}
+
+.achievement-text {
+    color: #facc15; /* Yellow text to match theme */
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Styles specific to endgame.html */
+.endgame-text {
+    color: #a0aec0; /* Light blue-grey for text */
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.endgame-buttons {
+    display: flex;
+    gap: 2rem; /* Space between buttons */
+    margin-top: 2rem;
+}
+
+.replay-button {
+    background-color: #facc15; /* Yellow background */
+    color: #1a2a4b; /* Dark blue text */
+    padding: 0.75rem 2rem;
+    border-radius: 9999px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #facc15;
+}
+
+.replay-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.replay-button svg {
+    margin-right: 0.5rem;
+}
+
+.end-game-button {
+    background-color: #ef4444; /* Red background */
+    color: #ffffff; /* White text */
+    padding: 0.75rem 2rem;
+    border-radius: 9999px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ef4444;
+}
+
+.end-game-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
