@@ -1,13 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Game</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jerry Can Rush</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <h1>Welcome to the Charity Water Game Prototype</h1>
-    <script src="script.js"></script>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-can">▣</div>
+        <div>
+          <p class="brand-name">charity: water</p>
+          <h1>Jerry Can Rush</h1>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="label">Score</span>
+          <span id="score">0</span>
+        </div>
+        <div class="stat">
+          <span class="label">Goal</span>
+          <span id="goal">100</span>
+        </div>
+        <div class="stat">
+          <span class="label">Time</span>
+          <span id="timer">30</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="intro">
+      <p>
+        Tap the yellow cans to collect clean water. Avoid broken pipes or you lose points.
+      </p>
+      <div class="actions">
+        <label for="difficultySelect">Difficulty:</label>
+        <select id="difficultySelect">
+          <option value="easy">Easy</option>
+          <option value="normal" selected>Normal</option>
+          <option value="hard">Hard</option>
+        </select>
+        <button id="startBtn">Start Game</button>
+        <button id="resetBtn">Reset</button>
+      </div>
+    </section>
+
+    <section class="game-wrap">
+      <aside class="instructions">
+        <h2>How to Play</h2>
+        <ul>
+          <li id="ruleCan">Tap yellow cans = +10 points</li>
+          <li id="rulePipe">Tap broken pipes = -5 points</li>
+          <li id="ruleGoal">Reach 100+ points before time runs out</li>
+        </ul>
+
+        <div class="progress-card">
+          <p class="progress-label">Progress to Win</p>
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="game-panel">
+        <div id="feedback" class="feedback">Press Start to play</div>
+        <div id="milestoneText" class="milestone hidden">Milestone reached!</div>
+
+        <div id="grid" class="grid">
+          <button class="cell" data-index="0"></button>
+          <button class="cell" data-index="1"></button>
+          <button class="cell" data-index="2"></button>
+          <button class="cell" data-index="3"></button>
+          <button class="cell" data-index="4"></button>
+          <button class="cell" data-index="5"></button>
+          <button class="cell" data-index="6"></button>
+          <button class="cell" data-index="7"></button>
+          <button class="cell" data-index="8"></button>
+        </div>
+      </section>
+    </section>
+
+    <section id="endScreen" class="end-screen hidden">
+      <h2 id="endTitle">Game Over</h2>
+      <p id="endMessage">You collected 0 liters.</p>
+      <button id="playAgainBtn">Play Again</button>
+    </section>
+
+    <div id="confettiContainer" class="confetti-container"></div>
+
+    <footer class="site-footer">
+      <p>Learn more and help fund clean water projects:</p>
+      <a href="https://www.charitywater.org/" target="_blank" rel="noopener noreferrer">charity: water website</a>
+      <a href="https://www.charitywater.org/donate" target="_blank" rel="noopener noreferrer">Donate to charity: water</a>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
