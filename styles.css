@@ -200,7 +200,7 @@ body {
 }
 
 .bucket-icon {
-  width: 52%;
+  width: 60%;
   height: auto;
   display: block;
   filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, 0.2));
@@ -366,7 +366,7 @@ body {
   }
 
   .bucket-icon {
-    width: 56%;
+    width: 62%;
   }
 
   .controls {

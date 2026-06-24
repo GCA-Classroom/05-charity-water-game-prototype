@@ -19,7 +19,7 @@ const rightBtn = document.getElementById("rightBtn");
 const celebration = document.getElementById("celebration");
 
 // Image path for final yellow jerry can
-const JERRY_CAN_PATH = "img/water_can_yellow.png";
+const JERRY_CAN_PATH = "img/water-can-transparent.png";
 
 // Game state
 let level = 1;
