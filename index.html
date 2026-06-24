@@ -1,13 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Game</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Water Collector</title>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-    <h1>Welcome to the Charity Water Game Prototype</h1>
-    <script src="script.js"></script>
+  <main class="game-page">
+
+    <!-- Top Bar -->
+    <header class="top-bar">
+      <h1>Water Collector</h1>
+
+      <div class="brand" aria-label="charity water logo">
+        <img
+          src="img/cw_logo_horizontal.png"
+          alt="charity: water logo"
+          class="brand-logo"
+        />
+      </div>
+    </header>
+
+    <!-- Stats -->
+    <section class="stats">
+      <div class="stat-box">
+        <span>Level</span>
+        <strong id="levelDisplay">1</strong>
+      </div>
+
+      <div class="stat-box timer-box">
+        <span>Timer</span>
+        <strong id="timerDisplay">30</strong>
+      </div>
+
+      <div class="stat-box">
+        <span>Moves</span>
+        <strong id="movesDisplay">0</strong>
+      </div>
+
+      <div class="stat-box">
+        <span>Score</span>
+        <strong id="scoreDisplay">0</strong>
+      </div>
+
+      <div class="stat-box">
+        <span>Lives</span>
+        <strong id="livesDisplay">💧💧💧</strong>
+      </div>
+    </section>
+
+    <!-- Message Area -->
+    <p id="message" class="message">
+      Every move helps deliver clean water. Fill every square, then reach the yellow jerry can!
+    </p>
+
+    <!-- Mission Card -->
+    <section class="mission-card">
+      <span class="mission-icon">💧</span>
+
+      <p>
+        Guide the water across the community. Reach the yellow jerry can only after every square has clean water.
+      </p>
+    </section>
+
+    <!-- Game Board Area -->
+    <section class="game-area">
+      <div id="gameBoard" class="game-board"></div>
+    </section>
+
+    <!-- Mobile Controls -->
+    <section class="controls" aria-label="Game movement controls">
+      <button id="upBtn" type="button" aria-label="Move up">↑</button>
+
+      <div class="middle-controls">
+        <button id="leftBtn" type="button" aria-label="Move left">←</button>
+        <button id="downBtn" type="button" aria-label="Move down">↓</button>
+        <button id="rightBtn" type="button" aria-label="Move right">→</button>
+      </div>
+    </section>
+
+    <!-- Game Buttons -->
+    <section class="game-buttons">
+      <button id="startBtn" type="button">Start Game</button>
+      <button id="resetBtn" type="button">Reset</button>
+    </section>
+
+  </main>
+
+  <!-- Win Celebration -->
+  <div id="celebration" class="celebration hidden">
+    🎉 Level Complete! 🎉
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
