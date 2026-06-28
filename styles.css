@@ -1,15 +1,514 @@
-/* Charity: water Brand Colors
+/* ============================================
+   EVERY DROP COUNTS - CHARITY: WATER GAME
+   CSS Styling (Mobile First)
+   ============================================ */
 
-Primary Colors:
-- Yellow:     #FFC907
-- Blue:       #2E9DF7
+/* ============================================
+   COLOR PALETTE
+   ============================================ */
+:root {
+  --dark-blue: #003366;      /* Primary - Dark Blue */
+  --yellow: #FFC907;         /* Accent - Yellow */
+  --light-blue: #77A8BB;     /* Secondary - Light Blue */
+  --cream: #FFF7E1;          /* Background - Cream */
+  --peach: #FED8C1;          /* Accent - Peach */
+  --white: #FFFFFF;
+  --dark-gray: #333333;
+  --light-gray: #F5F5F5;
+}
 
-Secondary Colors:
-- Light Blue: #8BD1CB
-- Green:      #4FCB53
-- Orange:     #FF902A
-- Red:        #F5402C
-- Dark Green: #159A48
-- Pink:       #F16061
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-*/
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--cream);
+  color: var(--dark-gray);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  gap: 0;
+}
+
+/* Full viewport layout */
+html {
+  height: 100%;
+}
+
+main {
+  flex: 1;
+}
+
+/* ============================================
+   HEADER SECTION
+   ============================================ */
+.header {
+  background: linear-gradient(135deg, var(--dark-blue) 0%, var(--light-blue) 100%);
+  color: var(--white);
+  padding: 16px 16px 12px 16px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.game-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+/* ============================================
+   COIN DISPLAY
+   Shows current coins at top
+   ============================================ */
+.coin-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 14px;
+  border-radius: 20px;
+  display: inline-flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.coin-icon {
+  font-size: 24px;
+}
+
+.coin-count {
+  font-size: 24px;
+  color: var(--yellow);
+}
+
+/* ============================================
+   PROGRESS BAR
+   Shows completion progress
+   ============================================ */
+.progress-container {
+  margin-top: 8px;
+}
+
+.progress-label {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  opacity: 0.95;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--yellow);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 10px;
+}
+
+.progress-text {
+  font-size: 11px;
+  opacity: 0.95;
+}
+
+/* ============================================
+   MAIN GAME AREA
+   Contains the falling drops and catch zone
+   ============================================ */
+.game-area {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background-color: var(--cream);
+  position: relative;
+  overflow: hidden;
+  min-height: 400px;
+  border-top: 4px solid var(--light-blue);
+  border-bottom: 4px solid var(--light-blue);
+}
+
+/* Game container - where drops fall */
+.game-container {
+  flex: 1;
+  position: relative;
+  background: linear-gradient(180deg, var(--cream) 0%, #F0E5D8 100%);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Individual falling water drop */
+.falling-drop {
+  position: absolute;
+  font-size: 40px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.05s ease;
+  
+  /* Makes drop look clickable */
+  &:hover {
+    filter: drop-shadow(0 0 8px rgba(0, 51, 102, 0.3));
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+/* Falling animation - drop moves from top to bottom */
+@keyframes fall {
+  from {
+    top: -50px;
+    opacity: 1;
+  }
+  to {
+    top: 100%;
+    opacity: 1;
+  }
+}
+
+/* Catch animation - drop gets bigger and disappears */
+@keyframes caught {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.caught {
+  animation: caught 0.4s ease forwards !important;
+}
+
+/* Catch zone at the bottom - where player tries to catch drops */
+.catch-zone {
+  background: linear-gradient(90deg, var(--light-blue), var(--peach));
+  padding: 20px;
+  text-align: center;
+  border-top: 3px solid var(--dark-blue);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.catch-instruction {
+  color: var(--white);
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* ============================================
+   PROJECT AREA
+   Shows purchased structures
+   ============================================ */
+.project-area {
+  background-color: var(--light-gray);
+  padding: 16px;
+  border-top: 3px solid var(--light-blue);
+  flex-shrink: 0;
+}
+
+.project-title {
+  font-size: 16px;
+  color: var(--dark-blue);
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+.project-display {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  min-height: 80px;
+}
+
+.empty-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--light-blue);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+/* Individual project item styling */
+.project-item {
+  background-color: var(--white);
+  border: 2px solid var(--peach);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--dark-blue);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   BUILD MENU / FOOTER
+   Contains purchase buttons
+   ============================================ */
+.build-menu {
+  background-color: var(--dark-blue);
+  color: var(--white);
+  padding: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.menu-title {
+  font-size: 16px;
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+.buttons-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+/* ============================================
+   BUILD BUTTONS
+   Purchase buttons for structures
+   ============================================ */
+.build-button {
+  background-color: var(--peach);
+  color: var(--dark-blue);
+  border: 2px solid transparent;
+  padding: 12px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.build-button:hover:not(:disabled) {
+  background-color: var(--yellow);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.build-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Disabled button styling - after purchase */
+.build-button:disabled {
+  background-color: var(--light-gray);
+  color: var(--light-blue);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.item-emoji {
+  font-size: 20px;
+}
+
+.item-name {
+  font-size: 11px;
+  display: block;
+}
+
+.item-cost {
+  font-size: 11px;
+  font-weight: bold;
+  color: var(--dark-blue);
+}
+
+/* ============================================
+   WIN SCREEN (Modal)
+   Shown when player completes all 4 structures
+   ============================================ */
+.win-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Show when active class is added */
+.win-screen.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Win content box */
+.win-content {
+  background-color: var(--white);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: popIn 0.4s ease;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.win-title {
+  font-size: 32px;
+  color: var(--dark-blue);
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+
+.win-message {
+  font-size: 16px;
+  color: var(--dark-gray);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+/* Button styling in win screen */
+.btn-play-again,
+.btn-learn-more {
+  display: block;
+  width: 100%;
+  padding: 14px 24px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.btn-play-again {
+  background-color: var(--yellow);
+  color: var(--dark-blue);
+}
+
+.btn-play-again:hover {
+  background-color: #FFB900;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-learn-more {
+  background-color: var(--light-blue);
+  color: var(--white);
+}
+
+.btn-learn-more:hover {
+  background-color: #6A96A3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   Tablet and desktop screens
+   ============================================ */
+@media (min-width: 768px) {
+  .game-title {
+    font-size: 40px;
+  }
+
+  .water-drop {
+    width: 160px;
+    height: 160px;
+    font-size: 120px;
+  }
+
+  .drop-instruction {
+    font-size: 18px;
+  }
+
+  .buttons-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .project-display {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ============================================
+   TABLET LAYOUT
+   ============================================ */
+@media (min-width: 1024px) {
+  body {
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+  }
+
+  .buttons-container {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}

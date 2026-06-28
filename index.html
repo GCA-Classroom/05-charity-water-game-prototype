@@ -3,11 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Game</title>
+    <title>Every Drop Counts - Charity: Water</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome to the Charity Water Game Prototype</h1>
+    <!-- ============================================
+         HEADER SECTION
+         Contains: Title, Coin Counter, Progress Bar
+         ============================================ -->
+    <header class="header">
+        <h1 class="game-title">Every Drop Counts</h1>
+        
+        <!-- Coin counter shows how many coins player has -->
+        <div class="coin-display">
+            <span class="coin-icon">💰</span>
+            <span class="coin-count" id="coinCount">0</span>
+        </div>
+
+        <!-- Progress bar shows how many project pieces are completed -->
+        <div class="progress-container">
+            <p class="progress-label">Project Progress</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p class="progress-text"><span id="progressCount">0</span> / 4 Completed</p>
+        </div>
+    </header>
+
+    <!-- ============================================
+         MAIN GAME AREA
+         Contains: The falling drops that player catches
+         ============================================ -->
+    <main class="game-area">
+        <!-- Game container where drops fall -->
+        <div class="game-container" id="gameContainer">
+            <!-- Drops will be created here by JavaScript -->
+        </div>
+
+        <!-- Catching zone at the bottom -->
+        <div class="catch-zone" id="catchZone">
+            <p class="catch-instruction">Catch the drops! 💧</p>
+        </div>
+    </main>
+
+    <!-- ============================================
+         COMMUNITY PROJECT AREA
+         Shows each structure after it's purchased
+         ============================================ -->
+    <section class="project-area">
+        <h2 class="project-title">Community Project</h2>
+        <div class="project-display" id="projectDisplay">
+            <!-- Project pieces will appear here when purchased -->
+            <p class="empty-message">Build structures to complete the project!</p>
+        </div>
+    </section>
+
+    <!-- ============================================
+         BUILD MENU / SHOP
+         Contains: Four buttons to purchase structures
+         ============================================ -->
+    <footer class="build-menu">
+        <h2 class="menu-title">Build Menu</h2>
+        <div class="buttons-container">
+            <!-- Button 1: Water Pump (20 coins) -->
+            <button class="build-button" id="pumpBtn" data-item="pump" data-cost="20">
+                <span class="item-emoji">🚿</span>
+                <span class="item-name">Water Pump</span>
+                <span class="item-cost">20 💰</span>
+            </button>
+
+            <!-- Button 2: Pipes (30 coins) -->
+            <button class="build-button" id="pipesBtn" data-item="pipes" data-cost="30">
+                <span class="item-emoji">🔧</span>
+                <span class="item-name">Pipes</span>
+                <span class="item-cost">30 💰</span>
+            </button>
+
+            <!-- Button 3: Storage Tank (40 coins) -->
+            <button class="build-button" id="tankBtn" data-item="tank" data-cost="40">
+                <span class="item-emoji">🏺</span>
+                <span class="item-name">Storage Tank</span>
+                <span class="item-cost">40 💰</span>
+            </button>
+
+            <!-- Button 4: Water Station (50 coins) -->
+            <button class="build-button" id="stationBtn" data-item="station" data-cost="50">
+                <span class="item-emoji">🏛️</span>
+                <span class="item-name">Water Station</span>
+                <span class="item-cost">50 💰</span>
+            </button>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         WIN SCREEN (Modal)
+         Hidden until player completes all 4 structures
+         ============================================ -->
+    <div class="win-screen" id="winScreen">
+        <div class="win-content">
+            <h2 class="win-title">🎉 Project Complete! 🎉</h2>
+            <p class="win-message">
+                You've successfully built a clean water project!
+                Your generosity will bring clean water to a community in need.
+            </p>
+            
+            <!-- Button to play again -->
+            <button class="btn-play-again" id="playAgainBtn">
+                Play Again
+            </button>
+
+            <!-- Button to learn more about charity: water -->
+            <a href="https://www.charitywater.org" target="_blank" class="btn-learn-more">
+                Learn More
+            </a>
+        </div>
+    </div>
+
+    <!-- Link to JavaScript file (goes at end of body for faster page load) -->
     <script src="script.js"></script>
 </body>
 </html>
