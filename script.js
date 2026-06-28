@@ -31,6 +31,10 @@ function initializeGame() {
   
   // Set up the purchase buttons
   initializeBuildButtons();
+
+  // Set up the reset button
+  const resetBtn = document.getElementById('resetBtn');
+  resetBtn.addEventListener('click', resetGame);
 }
 
 /* ============================================
@@ -54,7 +58,8 @@ function createFallingDrop() {
   
   // Create a new div element for the drop
   const drop = document.createElement('div');
-  drop.className = 'falling-drop';
+  const isObstacle = Math.random() < 0.2;  // About 20% of drops are tricky gray drops
+  drop.className = isObstacle ? 'falling-drop obstacle-drop' : 'falling-drop';
   drop.textContent = '💧';
   
   // Give each drop a unique ID
@@ -64,6 +69,7 @@ function createFallingDrop() {
   // Random horizontal position (left to right)
   const randomLeft = Math.random() * 90;  // 0-90% of container width
   drop.style.left = randomLeft + '%';
+  drop.style.top = '-50px';
   
   // Add the drop to the page
   gameContainer.appendChild(drop);
@@ -78,7 +84,7 @@ function createFallingDrop() {
   // Set up click handler to catch the drop
   drop.addEventListener('click', (e) => {
     e.stopPropagation();  // Prevent event from bubbling up
-    catchDrop(drop, dropId);
+    handleDropClick(drop, isObstacle);
   });
   
   // Remove drop from the page when animation finishes (if not caught)
@@ -90,15 +96,19 @@ function createFallingDrop() {
 }
 
 /* ============================================
-   CATCH DROP
-   Called when player clicks a falling drop
+   HANDLE DROP CLICK
+   Adds coins for good drops and removes coins for gray obstacle drops
    ============================================ */
-function catchDrop(dropElement, dropId) {
+function handleDropClick(dropElement, isObstacle) {
   // Play the catch animation
   dropElement.classList.add('caught');
   
-  // Add 5 coins when drop is caught
-  coins = coins + 5;
+  // Reward good drops, punish gray obstacle drops
+  if (isObstacle) {
+    coins = Math.max(0, coins - 10);
+  } else {
+    coins = coins + 5;
+  }
   
   // Update the coin display
   updateCoinDisplay();
@@ -141,15 +151,15 @@ function initializeBuildButtons() {
   });
   
   pipesBtn.addEventListener('click', () => {
-    attemptPurchase('pipes', 30, '🔧');
+    attemptPurchase('pipes', 25, '🔧');
   });
   
   tankBtn.addEventListener('click', () => {
-    attemptPurchase('tank', 40, '🏺');
+    attemptPurchase('tank', 30, '🏺');
   });
   
   stationBtn.addEventListener('click', () => {
-    attemptPurchase('station', 50, '🏛️');
+    attemptPurchase('station', 35, '🏛️');
   });
   
   console.log('Build buttons initialized!');
@@ -287,11 +297,36 @@ function showWinScreen() {
   // Show it by adding the 'active' class
   winScreen.classList.add('active');
   
+  // Create a confetti celebration effect
+  createConfetti();
+  
   // Set up the Play Again button
   const playAgainBtn = document.getElementById('playAgainBtn');
   playAgainBtn.addEventListener('click', resetGame);
   
   console.log('🎉 Player won! All structures built!');
+}
+
+/* ============================================
+   CREATE CONFETTI
+   Adds a burst of colorful pieces to celebrate a win
+   ============================================ */
+function createConfetti() {
+  const confettiLayer = document.getElementById('confettiLayer');
+  confettiLayer.innerHTML = '';
+
+  const colors = ['#FFC907', '#77A8BB', '#FED8C1', '#003366', '#FFFFFF'];
+
+  for (let i = 0; i < 40; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + '%';
+    piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 0.2 + 's';
+    piece.style.setProperty('--x-end', (Math.random() * 200 - 100) + 'px');
+    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+    confettiLayer.appendChild(piece);
+  }
 }
 
 /* ============================================
@@ -314,6 +349,9 @@ function resetGame() {
   // Hide the win screen
   const winScreen = document.getElementById('winScreen');
   winScreen.classList.remove('active');
+
+  const confettiLayer = document.getElementById('confettiLayer');
+  confettiLayer.innerHTML = '';
   
   // Reset progress bar
   const progressFill = document.getElementById('progressFill');

@@ -15,91 +15,89 @@
         <h1 class="game-title">Every Drop Counts</h1>
         
         <!-- Coin counter shows how many coins player has -->
-        <div class="coin-display">
-            <span class="coin-icon">💰</span>
-            <span class="coin-count" id="coinCount">0</span>
-        </div>
-
-        <!-- Progress bar shows how many project pieces are completed -->
-        <div class="progress-container">
-            <p class="progress-label">Project Progress</p>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+        <div class="header-controls">
+            <div class="coin-row">
+                <div class="coin-display">
+                    <span class="coin-icon">💰</span>
+                    <span class="coin-count" id="coinCount">0</span>
+                </div>
+                <button class="reset-button" id="resetBtn" type="button">Reset</button>
             </div>
-            <p class="progress-text"><span id="progressCount">0</span> / 4 Completed</p>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="progress-text"><span id="progressCount">0</span>/4</p>
+            </div>
         </div>
     </header>
 
     <!-- ============================================
-         MAIN GAME AREA
-         Contains: The falling drops that player catches
+         MAIN LAYOUT
+         Tap the drops section above, shop and project area below
          ============================================ -->
-    <main class="game-area">
-        <!-- Game container where drops fall -->
-        <div class="game-container" id="gameContainer">
-            <!-- Drops will be created here by JavaScript -->
+    <section class="game-area">
+        <div class="game-header">
+            <h2 class="game-title-small">Tap the Drops!</h2>
         </div>
-
-        <!-- Catching zone at the bottom -->
+        <div class="game-container" id="gameContainer"></div>
         <div class="catch-zone" id="catchZone">
-            <p class="catch-instruction">Catch the drops! 💧</p>
-        </div>
-    </main>
-
-    <!-- ============================================
-         COMMUNITY PROJECT AREA
-         Shows each structure after it's purchased
-         ============================================ -->
-    <section class="project-area">
-        <h2 class="project-title">Community Project</h2>
-        <div class="project-display" id="projectDisplay">
-            <!-- Project pieces will appear here when purchased -->
-            <p class="empty-message">Build structures to complete the project!</p>
+            <p class="catch-instruction">Catch the blue drops for +5 💰, but avoid the gray ones! They cost 10 💰.</p>
         </div>
     </section>
 
-    <!-- ============================================
-         BUILD MENU / SHOP
-         Contains: Four buttons to purchase structures
-         ============================================ -->
-    <footer class="build-menu">
-        <h2 class="menu-title">Build Menu</h2>
-        <div class="buttons-container">
-            <!-- Button 1: Water Pump (20 coins) -->
-            <button class="build-button" id="pumpBtn" data-item="pump" data-cost="20">
-                <span class="item-emoji">🚿</span>
-                <span class="item-name">Water Pump</span>
-                <span class="item-cost">20 💰</span>
-            </button>
+    <main class="bottom-row">
+        <!-- Left panel: item shop -->
+        <section class="shop-area">
+            <h2 class="menu-title">item shop</h2>
+            <div class="buttons-container">
+                <!-- Button 1: Water Pump (20 coins) -->
+                <button class="build-button" id="pumpBtn" data-item="pump" data-cost="20">
+                    <span class="item-emoji">🚿</span>
+                    <span class="item-name">Pump</span>
+                    <span class="item-cost">20 💰</span>
+                </button>
 
-            <!-- Button 2: Pipes (30 coins) -->
-            <button class="build-button" id="pipesBtn" data-item="pipes" data-cost="30">
-                <span class="item-emoji">🔧</span>
-                <span class="item-name">Pipes</span>
-                <span class="item-cost">30 💰</span>
-            </button>
+                <!-- Button 2: Pipes (30 coins) -->
+                <button class="build-button" id="pipesBtn" data-item="pipes" data-cost="25">
+                    <span class="item-emoji">🔧</span>
+                    <span class="item-name">Pipes</span>
+                    <span class="item-cost">25 💰</span>
+                </button>
 
-            <!-- Button 3: Storage Tank (40 coins) -->
-            <button class="build-button" id="tankBtn" data-item="tank" data-cost="40">
-                <span class="item-emoji">🏺</span>
-                <span class="item-name">Storage Tank</span>
-                <span class="item-cost">40 💰</span>
-            </button>
+                <!-- Button 3: Storage Tank (40 coins) -->
+                <button class="build-button" id="tankBtn" data-item="tank" data-cost="30">
+                    <span class="item-emoji">🏺</span>
+                    <span class="item-name">Tank</span>
+                    <span class="item-cost">30 💰</span>
+                </button>
 
-            <!-- Button 4: Water Station (50 coins) -->
-            <button class="build-button" id="stationBtn" data-item="station" data-cost="50">
-                <span class="item-emoji">🏛️</span>
-                <span class="item-name">Water Station</span>
-                <span class="item-cost">50 💰</span>
-            </button>
-        </div>
-    </footer>
+                <!-- Button 4: Water Station (50 coins) -->
+                <button class="build-button" id="stationBtn" data-item="station" data-cost="35">
+                    <span class="item-emoji">🏛️</span>
+                    <span class="item-name">Station</span>
+                    <span class="item-cost">35 💰</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Right panel: project area -->
+        <section class="project-area">
+            <h2 class="project-title">Project Area</h2>
+            <div class="project-display" id="projectDisplay">
+                <!-- Project pieces will appear here when purchased -->
+                <p class="empty-message">Build structures to complete the project!</p>
+            </div>
+        </section>
+    </main>
 
     <!-- ============================================
          WIN SCREEN (Modal)
          Hidden until player completes all 4 structures
          ============================================ -->
     <div class="win-screen" id="winScreen">
+        <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
         <div class="win-content">
             <h2 class="win-title">🎉 Project Complete! 🎉</h2>
             <p class="win-message">

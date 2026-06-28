@@ -36,10 +36,13 @@ body {
   background-color: var(--cream);
   color: var(--dark-gray);
   line-height: 1.6;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 150px 1fr;
   min-height: 100vh;
-  gap: 0;
+  max-height: 100vh;
+  gap: 10px;
+  padding: 10px;
+  overflow: hidden;
 }
 
 /* Full viewport layout */
@@ -48,8 +51,9 @@ html {
 }
 
 main {
-  flex: 1;
+  min-height: 0;
 }
+
 
 /* ============================================
    HEADER SECTION
@@ -61,6 +65,7 @@ main {
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
+  max-height: 160px;
 }
 
 .game-title {
@@ -74,6 +79,14 @@ main {
    COIN DISPLAY
    Shows current coins at top
    ============================================ */
+.coin-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
 .coin-display {
   display: flex;
   align-items: center;
@@ -81,13 +94,10 @@ main {
   gap: 6px;
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 12px;
   background: rgba(255, 255, 255, 0.2);
   padding: 8px 14px;
   border-radius: 20px;
   display: inline-flex;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .coin-icon {
@@ -99,28 +109,48 @@ main {
   color: var(--yellow);
 }
 
+.reset-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 999px;
+  background-color: var(--yellow);
+  color: var(--dark-blue);
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.reset-button:hover {
+  background-color: #FFB900;
+  transform: translateY(-2px);
+}
+
 /* ============================================
    PROGRESS BAR
    Shows completion progress
    ============================================ */
-.progress-container {
-  margin-top: 8px;
+.header-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-.progress-label {
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  opacity: 0.95;
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 180px;
+  max-width: 220px;
 }
 
 .progress-bar {
-  width: 100%;
+  flex: 1;
   height: 10px;
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 10px;
   overflow: hidden;
-  margin-bottom: 6px;
 }
 
 .progress-fill {
@@ -132,30 +162,65 @@ main {
 }
 
 .progress-text {
-  font-size: 11px;
-  opacity: 0.95;
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--yellow);
+  white-space: nowrap;
 }
 
 /* ============================================
-   MAIN GAME AREA
-   Contains the falling drops and catch zone
+   BOTTOM ROW LAYOUT
+   Shop and tap area side by side
    ============================================ */
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  min-height: 0;
+}
+
+.shop-area,
 .game-area {
-  flex: 1 1 auto;
+  background-color: var(--white);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  min-height: 220px;
+}
+
+.game-area {
+  min-height: 260px;
+}
+
+.shop-area {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+
+.game-area {
   display: flex;
   flex-direction: column;
   padding: 0;
-  background-color: var(--cream);
-  position: relative;
-  overflow: hidden;
-  min-height: 400px;
-  border-top: 4px solid var(--light-blue);
-  border-bottom: 4px solid var(--light-blue);
+  min-height: 0;
+}
+
+.game-header {
+  background-color: var(--light-gray);
+  padding: 12px;
+  text-align: center;
+}
+
+.game-title-small {
+  font-size: 18px;
+  color: var(--dark-blue);
+  margin: 0;
 }
 
 /* Game container - where drops fall */
 .game-container {
   flex: 1;
+  min-height: 0;
   position: relative;
   background: linear-gradient(180deg, var(--cream) 0%, #F0E5D8 100%);
   overflow: hidden;
@@ -167,20 +232,25 @@ main {
 /* Individual falling water drop */
 .falling-drop {
   position: absolute;
+  top: -50px;
   font-size: 40px;
   cursor: pointer;
   user-select: none;
   transition: all 0.05s ease;
-  
-  /* Makes drop look clickable */
-  &:hover {
-    filter: drop-shadow(0 0 8px rgba(0, 51, 102, 0.3));
-    transform: scale(1.1);
-  }
+}
 
-  &:active {
-    transform: scale(0.9);
-  }
+.falling-drop:hover {
+  filter: drop-shadow(0 0 8px rgba(0, 51, 102, 0.3));
+  transform: scale(1.1);
+}
+
+.obstacle-drop {
+  filter: grayscale(1) brightness(0.7);
+  opacity: 0.8;
+}
+
+.falling-drop:active {
+  transform: scale(0.9);
 }
 
 /* Falling animation - drop moves from top to bottom */
@@ -214,10 +284,10 @@ main {
 /* Catch zone at the bottom - where player tries to catch drops */
 .catch-zone {
   background: linear-gradient(90deg, var(--light-blue), var(--peach));
-  padding: 20px;
+  padding: 12px;
   text-align: center;
   border-top: 3px solid var(--dark-blue);
-  min-height: 100px;
+  min-height: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -236,23 +306,26 @@ main {
    Shows purchased structures
    ============================================ */
 .project-area {
-  background-color: var(--light-gray);
-  padding: 16px;
-  border-top: 3px solid var(--light-blue);
+  background-color: var(--white);
+  padding: 10px;
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
+  min-height: 0;
+  height: 100%;
 }
 
 .project-title {
-  font-size: 16px;
+  font-size: 14px;
   color: var(--dark-blue);
-  margin-bottom: 12px;
+  margin-bottom: 6px;
   font-weight: bold;
 }
 
 .project-display {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: 1fr;
+  gap: 6px;
   min-height: 80px;
 }
 
@@ -292,27 +365,20 @@ main {
 }
 
 /* ============================================
-   BUILD MENU / FOOTER
-   Contains purchase buttons
+   ITEM SHOP CONTENT
    ============================================ */
-.build-menu {
-  background-color: var(--dark-blue);
-  color: var(--white);
-  padding: 16px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.menu-title {
-  font-size: 16px;
-  margin-bottom: 12px;
-  font-weight: bold;
+.shop-area .menu-title {
+  font-size: 18px;
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+  color: var(--dark-blue);
+  margin-bottom: 14px;
 }
 
 .buttons-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: 1fr;
+  gap: 6px;
 }
 
 /* ============================================
@@ -324,15 +390,15 @@ main {
   color: var(--dark-blue);
   border: 2px solid transparent;
   padding: 12px 10px;
-  border-radius: 8px;
-  font-size: 13px;
+  border-radius: 12px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .build-button:hover:not(:disabled) {
@@ -395,6 +461,22 @@ main {
   visibility: visible;
 }
 
+.confetti-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -10px;
+  width: 10px;
+  height: 18px;
+  opacity: 0;
+  animation: confettiFall 1.8s linear forwards;
+}
+
 /* Win content box */
 .win-content {
   background-color: var(--white);
@@ -414,6 +496,20 @@ main {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--x-end), 110vh, 0) rotate(540deg);
+    opacity: 1;
   }
 }
 
@@ -475,10 +571,6 @@ main {
    Tablet and desktop screens
    ============================================ */
 @media (min-width: 768px) {
-  .game-title {
-    font-size: 40px;
-  }
-
   .water-drop {
     width: 160px;
     height: 160px;
@@ -490,11 +582,11 @@ main {
   }
 
   .buttons-container {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .project-display {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -502,9 +594,8 @@ main {
    TABLET LAYOUT
    ============================================ */
 @media (min-width: 1024px) {
-  body {
-    display: grid;
-    grid-template-rows: auto 1fr auto auto;
+  .bottom-row {
+    grid-template-columns: 1fr 1fr;
   }
 
   .buttons-container {
