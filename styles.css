@@ -32,7 +32,7 @@ html, body {
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--cream);
   color: var(--dark-gray);
   line-height: 1.6;
@@ -137,6 +137,56 @@ main {
   flex-wrap: wrap;
 }
 
+.difficulty-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.difficulty-label {
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+
+.difficulty-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.difficulty-button {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.difficulty-button:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.difficulty-button.active {
+  background-color: var(--yellow);
+  color: var(--dark-blue);
+  border-color: var(--yellow);
+}
+
+.difficulty-status {
+  font-size: 12px;
+  color: var(--cream);
+}
+
 .progress-container {
   display: flex;
   align-items: center;
@@ -229,6 +279,46 @@ main {
   justify-content: center;
 }
 
+.feedback-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.feedback-message {
+  position: absolute;
+  color: var(--dark-blue);
+  font-size: 16px;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid var(--yellow);
+  border-radius: 999px;
+  padding: 6px 10px;
+  transform: translate(-50%, -50%);
+  animation: feedbackPop 0.8s ease forwards;
+}
+
+.feedback-message.obstacle-feedback {
+  color: #A33A2D;
+  border-color: #A33A2D;
+}
+
+@keyframes feedbackPop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -120%) scale(1);
+  }
+}
+
 /* Individual falling water drop */
 .falling-drop {
   position: absolute;
@@ -289,8 +379,10 @@ main {
   border-top: 3px solid var(--dark-blue);
   min-height: 72px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   flex-shrink: 0;
 }
 
@@ -299,6 +391,21 @@ main {
   font-size: 18px;
   font-weight: bold;
   margin: 0;
+}
+
+.milestone-message {
+  min-height: 24px;
+  color: var(--dark-blue);
+  font-size: 14px;
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.milestone-message.active {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ============================================
@@ -564,6 +671,41 @@ main {
   background-color: #6A96A3;
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================
+   FOOTER LINKS
+   ============================================ */
+.game-footer {
+  background-color: var(--dark-blue);
+  color: var(--white);
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 14px;
+  margin-top: 8px;
+}
+
+.footer-text {
+  font-size: 13px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--yellow);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
 }
 
 /* ============================================

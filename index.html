@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Every Drop Counts - Charity: Water</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -24,11 +27,21 @@
                 <button class="reset-button" id="resetBtn" type="button">Reset</button>
             </div>
 
+            <div class="difficulty-controls">
+                <p class="difficulty-label">Difficulty</p>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-button active" id="easyBtn" data-difficulty="easy" type="button">Easy</button>
+                    <button class="difficulty-button" id="normalBtn" data-difficulty="normal" type="button">Normal</button>
+                    <button class="difficulty-button" id="hardBtn" data-difficulty="hard" type="button">Hard</button>
+                </div>
+                <p class="difficulty-status" id="difficultyStatus">Normal mode · Goal: 3 structures</p>
+            </div>
+
             <div class="progress-container">
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
-                <p class="progress-text"><span id="progressCount">0</span>/4</p>
+                <p class="progress-text"><span id="progressCount">0</span>/3</p>
             </div>
         </div>
     </header>
@@ -41,9 +54,12 @@
         <div class="game-header">
             <h2 class="game-title-small">Tap the Drops!</h2>
         </div>
-        <div class="game-container" id="gameContainer"></div>
+        <div class="game-container" id="gameContainer">
+            <div class="feedback-layer" id="feedbackLayer" aria-hidden="true"></div>
+        </div>
         <div class="catch-zone" id="catchZone">
-            <p class="catch-instruction">Catch the blue drops for +5 💰, but avoid the gray ones! They cost 10 💰.</p>
+            <p class="catch-instruction" id="catchInstruction">Catch the blue drops for +5 💰, but avoid the gray ones! They cost 10 💰.</p>
+            <p class="milestone-message" id="milestoneMessage" aria-live="polite"></p>
         </div>
     </section>
 
@@ -116,6 +132,14 @@
             </a>
         </div>
     </div>
+
+    <footer class="game-footer">
+        <p class="footer-text">Support the mission:</p>
+        <div class="footer-links">
+            <a href="https://www.charitywater.org/" target="_blank" rel="noopener noreferrer">charity: water</a>
+            <a href="https://www.charitywater.org/donate/" target="_blank" rel="noopener noreferrer">Donate</a>
+        </div>
+    </footer>
 
     <!-- Link to JavaScript file (goes at end of body for faster page load) -->
     <script src="script.js"></script>

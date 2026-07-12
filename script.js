@@ -7,9 +7,19 @@
    GAME STATE
    Track coins, purchased items, and progress
    ============================================ */
-let coins = 0;  // Player's current coins
-let itemsPurchased = 0;  // Number of structures built (0-4)
-let dropCounter = 0;  // Unique ID for each drop (for tracking)
+let coins = 0;
+let itemsPurchased = 0;
+let dropCounter = 0;
+let dropTimerId = null;
+let difficulty = 'normal';
+let milestoneMessagesShown = [];
+
+const milestoneMessages = [
+  { threshold: 10, message: 'Halfway there!' },
+  { threshold: 20, message: 'You are building momentum!' },
+  { threshold: 30, message: 'Amazing teamwork!' },
+  { threshold: 40, message: 'You are changing lives!' }
+];
 
 // Track which items have been purchased (true = purchased, false = not yet)
 let purchasedItems = {
@@ -19,33 +29,98 @@ let purchasedItems = {
   station: false
 };
 
+const difficultySettings = {
+  easy: {
+    label: 'Easy',
+    requiredItems: 2,
+    spawnInterval: 1100,
+    fallDuration: 4200,
+    obstacleRate: 0.1
+  },
+  normal: {
+    label: 'Normal',
+    requiredItems: 3,
+    spawnInterval: 800,
+    fallDuration: 3500,
+    obstacleRate: 0.2
+  },
+  hard: {
+    label: 'Hard',
+    requiredItems: 4,
+    spawnInterval: 600,
+    fallDuration: 2800,
+    obstacleRate: 0.35
+  }
+};
+
 /* ============================================
    INITIALIZE GAME
    Runs when the page loads
    ============================================ */
 function initializeGame() {
   console.log('Game initialized! Catch the falling drops!');
-  
-  // Start spawning drops every 800ms
-  spawnDrops();
-  
-  // Set up the purchase buttons
+
+  initializeDifficultyButtons();
   initializeBuildButtons();
 
-  // Set up the reset button
   const resetBtn = document.getElementById('resetBtn');
   resetBtn.addEventListener('click', resetGame);
+
+  const playAgainBtn = document.getElementById('playAgainBtn');
+  playAgainBtn.addEventListener('click', resetGame);
+
+  resetGame();
+}
+
+function getDifficultySettings() {
+  return difficultySettings[difficulty];
+}
+
+function initializeDifficultyButtons() {
+  const difficultyButtons = document.querySelectorAll('.difficulty-button');
+
+  difficultyButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      difficulty = button.dataset.difficulty;
+      updateDifficultyUI();
+      resetGame();
+    });
+  });
+}
+
+function updateDifficultyUI() {
+  const currentSettings = getDifficultySettings();
+  const statusElement = document.getElementById('difficultyStatus');
+  const instructionElement = document.getElementById('catchInstruction');
+
+  document.querySelectorAll('.difficulty-button').forEach((button) => {
+    button.classList.toggle('active', button.dataset.difficulty === difficulty);
+  });
+
+  statusElement.textContent = `${currentSettings.label} mode · Goal: ${currentSettings.requiredItems} structures`;
+
+  if (difficulty === 'easy') {
+    instructionElement.textContent = 'Easy mode: build 2 structures with slower drops and fewer gray obstacles.';
+  } else if (difficulty === 'hard') {
+    instructionElement.textContent = 'Hard mode: build 4 structures while faster drops and more gray obstacles test your focus.';
+  } else {
+    instructionElement.textContent = 'Normal mode: build 3 structures as the drops keep moving.';
+  }
 }
 
 /* ============================================
-   SPAWN DROPS
+   START DROP SPAWNER
    Creates new falling water drops at intervals
    ============================================ */
-function spawnDrops() {
-  // Create a new drop every 800 milliseconds
-  setInterval(() => {
+function startDropSpawner() {
+  if (dropTimerId) {
+    clearInterval(dropTimerId);
+  }
+
+  const settings = getDifficultySettings();
+  dropTimerId = setInterval(() => {
     createFallingDrop();
-  }, 800);
+  }, settings.spawnInterval);
 }
 
 /* ============================================
@@ -53,41 +128,31 @@ function spawnDrops() {
    Makes a single water drop that falls from top to bottom
    ============================================ */
 function createFallingDrop() {
-  // Get the game container where drops appear
   const gameContainer = document.getElementById('gameContainer');
-  
-  // Create a new div element for the drop
+  const settings = getDifficultySettings();
+
   const drop = document.createElement('div');
-  const isObstacle = Math.random() < 0.2;  // About 20% of drops are tricky gray drops
+  const isObstacle = Math.random() < settings.obstacleRate;
   drop.className = isObstacle ? 'falling-drop obstacle-drop' : 'falling-drop';
   drop.textContent = '💧';
-  
-  // Give each drop a unique ID
+
   const dropId = dropCounter++;
   drop.id = `drop-${dropId}`;
-  
-  // Random horizontal position (left to right)
-  const randomLeft = Math.random() * 90;  // 0-90% of container width
+
+  const randomLeft = Math.random() * 90;
   drop.style.left = randomLeft + '%';
   drop.style.top = '-50px';
-  
-  // Add the drop to the page
+
   gameContainer.appendChild(drop);
-  
-  // Calculate fall duration (how long it takes to reach bottom)
-  // Typically 3-4 seconds for good gameplay
-  const fallDuration = 3500;  // milliseconds
-  
-  // Apply the falling animation
+
+  const fallDuration = settings.fallDuration;
   drop.style.animation = `fall ${fallDuration}ms linear forwards`;
-  
-  // Set up click handler to catch the drop
+
   drop.addEventListener('click', (e) => {
-    e.stopPropagation();  // Prevent event from bubbling up
+    e.stopPropagation();
     handleDropClick(drop, isObstacle);
   });
-  
-  // Remove drop from the page when animation finishes (if not caught)
+
   setTimeout(() => {
     if (drop.parentNode) {
       drop.remove();
@@ -100,25 +165,40 @@ function createFallingDrop() {
    Adds coins for good drops and removes coins for gray obstacle drops
    ============================================ */
 function handleDropClick(dropElement, isObstacle) {
-  // Play the catch animation
   dropElement.classList.add('caught');
-  
-  // Reward good drops, punish gray obstacle drops
+
   if (isObstacle) {
     coins = Math.max(0, coins - 10);
   } else {
     coins = coins + 5;
   }
-  
-  // Update the coin display
+
+  showInteractionFeedback(dropElement, isObstacle);
   updateCoinDisplay();
-  
-  // Remove the drop element after animation completes
+  checkMilestones();
+
   setTimeout(() => {
     if (dropElement.parentNode) {
       dropElement.remove();
     }
-  }, 400);  // Match the 'caught' animation duration
+  }, 400);
+}
+
+function showInteractionFeedback(dropElement, isObstacle) {
+  const feedbackLayer = document.getElementById('feedbackLayer');
+  const feedback = document.createElement('div');
+  feedback.className = isObstacle ? 'feedback-message obstacle-feedback' : 'feedback-message';
+  feedback.textContent = isObstacle ? '-10 💰' : '+5 💰';
+  feedback.style.left = dropElement.style.left;
+  feedback.style.top = '20px';
+
+  feedbackLayer.appendChild(feedback);
+
+  setTimeout(() => {
+    if (feedback.parentNode) {
+      feedback.remove();
+    }
+  }, 800);
 }
 
 /* ============================================
@@ -126,11 +206,28 @@ function handleDropClick(dropElement, isObstacle) {
    Shows the current coin count on the page
    ============================================ */
 function updateCoinDisplay() {
-  // Find the element that shows coin count
   const coinCountElement = document.getElementById('coinCount');
-  
-  // Change its text to the current coin amount
   coinCountElement.textContent = coins;
+}
+
+function showMilestoneMessage(message) {
+  const milestoneMessage = document.getElementById('milestoneMessage');
+  milestoneMessage.textContent = message;
+  milestoneMessage.classList.add('active');
+
+  setTimeout(() => {
+    milestoneMessage.classList.remove('active');
+    milestoneMessage.textContent = '';
+  }, 1800);
+}
+
+function checkMilestones() {
+  milestoneMessages.forEach((milestone) => {
+    if (coins >= milestone.threshold && !milestoneMessagesShown.includes(milestone.threshold)) {
+      milestoneMessagesShown.push(milestone.threshold);
+      showMilestoneMessage(milestone.message);
+    }
+  });
 }
 
 /* ============================================
@@ -138,30 +235,27 @@ function updateCoinDisplay() {
    Set up click handlers for all purchase buttons
    ============================================ */
 function initializeBuildButtons() {
-  // Get all the build buttons
   const pumpBtn = document.getElementById('pumpBtn');
   const pipesBtn = document.getElementById('pipesBtn');
   const tankBtn = document.getElementById('tankBtn');
   const stationBtn = document.getElementById('stationBtn');
-  
-  // Add click event listeners to each button
-  // When clicked, try to purchase the item
+
   pumpBtn.addEventListener('click', () => {
     attemptPurchase('pump', 20, '🚿');
   });
-  
+
   pipesBtn.addEventListener('click', () => {
     attemptPurchase('pipes', 25, '🔧');
   });
-  
+
   tankBtn.addEventListener('click', () => {
     attemptPurchase('tank', 30, '🏺');
   });
-  
+
   stationBtn.addEventListener('click', () => {
     attemptPurchase('station', 35, '🏛️');
   });
-  
+
   console.log('Build buttons initialized!');
 }
 
@@ -170,42 +264,25 @@ function initializeBuildButtons() {
    Try to buy an item - checks if player has enough coins
    ============================================ */
 function attemptPurchase(itemName, itemCost, itemEmoji) {
-  // Check if already purchased
   if (purchasedItems[itemName]) {
     console.log('Already purchased!');
-    return;  // Exit function - can't buy twice
+    return;
   }
-  
-  // Check if player has enough coins
+
   if (coins >= itemCost) {
-    // Player has enough coins!
-    // Deduct the cost
     coins = coins - itemCost;
-    
-    // Mark item as purchased
     purchasedItems[itemName] = true;
-    
-    // Increment the count of purchased items
     itemsPurchased = itemsPurchased + 1;
-    
-    // Update the coin display
+
     updateCoinDisplay();
-    
-    // Display the item in the project area
+    checkMilestones();
     displayProjectItem(itemName, itemEmoji);
-    
-    // Disable the purchase button so it can't be bought again
     disablePurchaseButton(itemName);
-    
-    // Update the progress bar
     updateProgressBar();
-    
-    // Check if player won (all 4 items purchased)
     checkForWin();
-    
-    console.log(`${itemName} purchased! Items built: ${itemsPurchased}/4`);
+
+    console.log(`${itemName} purchased! Items built: ${itemsPurchased}/${getDifficultySettings().requiredItems}`);
   } else {
-    // Player doesn't have enough coins
     alert(`Not enough coins! Need ${itemCost}, you have ${coins}.`);
   }
 }
@@ -215,18 +292,14 @@ function attemptPurchase(itemName, itemCost, itemEmoji) {
    Grays out button after item is purchased
    ============================================ */
 function disablePurchaseButton(itemName) {
-  // Map item names to button IDs
   const buttonIds = {
-    'pump': 'pumpBtn',
-    'pipes': 'pipesBtn',
-    'tank': 'tankBtn',
-    'station': 'stationBtn'
+    pump: 'pumpBtn',
+    pipes: 'pipesBtn',
+    tank: 'tankBtn',
+    station: 'stationBtn'
   };
-  
-  // Get the button element
+
   const button = document.getElementById(buttonIds[itemName]);
-  
-  // Disable it (grays out and prevents clicks)
   button.disabled = true;
 }
 
@@ -235,22 +308,18 @@ function disablePurchaseButton(itemName) {
    Shows the purchased item in the project display area
    ============================================ */
 function displayProjectItem(itemName, itemEmoji) {
-  // Get the project display container
   const projectDisplay = document.getElementById('projectDisplay');
-  
-  // Remove the "empty message" on first purchase
+
   const emptyMessage = projectDisplay.querySelector('.empty-message');
   if (emptyMessage) {
     emptyMessage.remove();
   }
-  
-  // Create a new div for this project item
+
   const itemElement = document.createElement('div');
   itemElement.className = 'project-item';
   itemElement.textContent = itemEmoji;
   itemElement.id = `item-${itemName}`;
-  
-  // Add it to the project display
+
   projectDisplay.appendChild(itemElement);
 }
 
@@ -259,29 +328,21 @@ function displayProjectItem(itemName, itemEmoji) {
    Fills the progress bar based on items purchased
    ============================================ */
 function updateProgressBar() {
-  // Get the progress elements
   const progressFill = document.getElementById('progressFill');
   const progressCount = document.getElementById('progressCount');
-  
-  // Calculate progress percentage (0-100)
-  // 4 items total, so each item = 25%
-  const progressPercent = (itemsPurchased / 4) * 100;
-  
-  // Update the progress bar width
+  const targetCount = getDifficultySettings().requiredItems;
+  const progressPercent = (itemsPurchased / targetCount) * 100;
+
   progressFill.style.width = progressPercent + '%';
-  
-  // Update the progress text (e.g., "2 / 4 Completed")
-  progressCount.textContent = itemsPurchased;
+  progressCount.textContent = `${itemsPurchased}/${targetCount}`;
 }
 
 /* ============================================
    CHECK FOR WIN
-   See if player has purchased all 4 items
+   See if player has reached the goal for the current difficulty
    ============================================ */
 function checkForWin() {
-  // If all 4 items have been purchased
-  if (itemsPurchased === 4) {
-    // Show the win screen
+  if (itemsPurchased >= getDifficultySettings().requiredItems) {
     showWinScreen();
   }
 }
@@ -291,20 +352,15 @@ function checkForWin() {
    Display congratulations message and buttons
    ============================================ */
 function showWinScreen() {
-  // Get the win screen element
   const winScreen = document.getElementById('winScreen');
-  
-  // Show it by adding the 'active' class
+  const winMessage = document.querySelector('.win-message');
+
   winScreen.classList.add('active');
-  
-  // Create a confetti celebration effect
+  winMessage.textContent = `You reached the ${getDifficultySettings().label.toLowerCase()} goal and helped fund a clean water project!`;
+
   createConfetti();
-  
-  // Set up the Play Again button
-  const playAgainBtn = document.getElementById('playAgainBtn');
-  playAgainBtn.addEventListener('click', resetGame);
-  
-  console.log('🎉 Player won! All structures built!');
+
+  console.log(`🎉 Player won on ${difficulty} difficulty!`);
 }
 
 /* ============================================
@@ -331,48 +387,53 @@ function createConfetti() {
 
 /* ============================================
    RESET GAME
-   Called when player clicks "Play Again"
+   Called when player clicks Reset or Play Again
    ============================================ */
 function resetGame() {
-  // Reset all game variables
   coins = 0;
   itemsPurchased = 0;
   dropCounter = 0;
-  
+  milestoneMessagesShown = [];
+
   purchasedItems = {
     pump: false,
     pipes: false,
     tank: false,
     station: false
   };
-  
-  // Hide the win screen
+
   const winScreen = document.getElementById('winScreen');
   winScreen.classList.remove('active');
 
   const confettiLayer = document.getElementById('confettiLayer');
   confettiLayer.innerHTML = '';
-  
-  // Reset progress bar
+
+  const feedbackLayer = document.getElementById('feedbackLayer');
+  feedbackLayer.innerHTML = '';
+
+  const milestoneMessage = document.getElementById('milestoneMessage');
+  milestoneMessage.textContent = '';
+  milestoneMessage.classList.remove('active');
+
   const progressFill = document.getElementById('progressFill');
   progressFill.style.width = '0%';
-  
+
   const progressCount = document.getElementById('progressCount');
-  progressCount.textContent = '0';
-  
-  // Reset coin display
+  progressCount.textContent = `0/${getDifficultySettings().requiredItems}`;
+
   updateCoinDisplay();
-  
-  // Clear the project display and show empty message
+  updateDifficultyUI();
+
   const projectDisplay = document.getElementById('projectDisplay');
   projectDisplay.innerHTML = '<p class="empty-message">Build structures to complete the project!</p>';
-  
-  // Re-enable all buttons
+
   const allButtons = document.querySelectorAll('.build-button');
-  allButtons.forEach(button => {
+  allButtons.forEach((button) => {
     button.disabled = false;
   });
-  
+
+  startDropSpawner();
+
   console.log('Game reset! Ready to play again!');
 }
 
