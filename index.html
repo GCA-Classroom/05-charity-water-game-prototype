@@ -3,11 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Game</title>
+    <title>Every Drop Counts - Charity: Water</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome to the Charity Water Game Prototype</h1>
+    <!-- ============================================
+         HEADER SECTION
+         Contains: Title, Coin Counter, Progress Bar
+         ============================================ -->
+    <header class="header">
+        <h1 class="game-title">Every Drop Counts</h1>
+        
+        <!-- Coin counter shows how many coins player has -->
+        <div class="header-controls">
+            <div class="coin-row">
+                <div class="coin-display">
+                    <span class="coin-icon">💰</span>
+                    <span class="coin-count" id="coinCount">0</span>
+                </div>
+                <button class="reset-button" id="resetBtn" type="button">Reset</button>
+            </div>
+
+            <div class="difficulty-controls">
+                <p class="difficulty-label">Difficulty</p>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-button active" id="easyBtn" data-difficulty="easy" type="button">Easy</button>
+                    <button class="difficulty-button" id="normalBtn" data-difficulty="normal" type="button">Normal</button>
+                    <button class="difficulty-button" id="hardBtn" data-difficulty="hard" type="button">Hard</button>
+                </div>
+                <p class="difficulty-status" id="difficultyStatus">Normal mode · Goal: 3 structures</p>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="progress-text"><span id="progressCount">0</span>/3</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================
+         MAIN LAYOUT
+         Tap the drops section above, shop and project area below
+         ============================================ -->
+    <section class="game-area">
+        <div class="game-header">
+            <h2 class="game-title-small">Tap the Drops!</h2>
+        </div>
+        <div class="game-container" id="gameContainer">
+            <div class="feedback-layer" id="feedbackLayer" aria-hidden="true"></div>
+        </div>
+        <div class="catch-zone" id="catchZone">
+            <p class="catch-instruction" id="catchInstruction">Catch the blue drops for +5 💰, but avoid the gray ones! They cost 10 💰.</p>
+            <p class="milestone-message" id="milestoneMessage" aria-live="polite"></p>
+        </div>
+    </section>
+
+    <main class="bottom-row">
+        <!-- Left panel: item shop -->
+        <section class="shop-area">
+            <h2 class="menu-title">item shop</h2>
+            <div class="buttons-container">
+                <!-- Button 1: Water Pump (20 coins) -->
+                <button class="build-button" id="pumpBtn" data-item="pump" data-cost="20">
+                    <span class="item-emoji">🚿</span>
+                    <span class="item-name">Pump</span>
+                    <span class="item-cost">20 💰</span>
+                </button>
+
+                <!-- Button 2: Pipes (30 coins) -->
+                <button class="build-button" id="pipesBtn" data-item="pipes" data-cost="25">
+                    <span class="item-emoji">🔧</span>
+                    <span class="item-name">Pipes</span>
+                    <span class="item-cost">25 💰</span>
+                </button>
+
+                <!-- Button 3: Storage Tank (40 coins) -->
+                <button class="build-button" id="tankBtn" data-item="tank" data-cost="30">
+                    <span class="item-emoji">🏺</span>
+                    <span class="item-name">Tank</span>
+                    <span class="item-cost">30 💰</span>
+                </button>
+
+                <!-- Button 4: Water Station (50 coins) -->
+                <button class="build-button" id="stationBtn" data-item="station" data-cost="35">
+                    <span class="item-emoji">🏛️</span>
+                    <span class="item-name">Station</span>
+                    <span class="item-cost">35 💰</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Right panel: project area -->
+        <section class="project-area">
+            <h2 class="project-title">Project Area</h2>
+            <div class="project-display" id="projectDisplay">
+                <!-- Project pieces will appear here when purchased -->
+                <p class="empty-message">Build structures to complete the project!</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================
+         WIN SCREEN (Modal)
+         Hidden until player completes all 4 structures
+         ============================================ -->
+    <div class="win-screen" id="winScreen">
+        <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+        <div class="win-content">
+            <h2 class="win-title">🎉 Project Complete! 🎉</h2>
+            <p class="win-message">
+                You've successfully built a clean water project!
+                Your generosity will bring clean water to a community in need.
+            </p>
+            
+            <!-- Button to play again -->
+            <button class="btn-play-again" id="playAgainBtn">
+                Play Again
+            </button>
+
+            <!-- Button to learn more about charity: water -->
+            <a href="https://www.charitywater.org" target="_blank" class="btn-learn-more">
+                Learn More
+            </a>
+        </div>
+    </div>
+
+    <footer class="game-footer">
+        <p class="footer-text">Support the mission:</p>
+        <div class="footer-links">
+            <a href="https://www.charitywater.org/" target="_blank" rel="noopener noreferrer">charity: water</a>
+            <a href="https://www.charitywater.org/donate/" target="_blank" rel="noopener noreferrer">Donate</a>
+        </div>
+    </footer>
+
+    <!-- Link to JavaScript file (goes at end of body for faster page load) -->
     <script src="script.js"></script>
 </body>
 </html>
