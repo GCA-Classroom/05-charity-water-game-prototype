@@ -13,3 +13,491 @@ Secondary Colors:
 - Pink:       #F16061
 
 */
+
+
+/* ---------- GENERAL PAGE ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 24px 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f2e9;
+  color: #173f35;
+}
+
+.game-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.game-header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.eyebrow {
+  color: #e9a33b;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+h1 {
+  margin: 10px 0;
+  font-size: clamp(28px, 5vw, 42px);
+}
+
+.instructions {
+  color: #596b61;
+  line-height: 1.6;
+}
+
+/* ---------- SCORE AND TIMER ---------- */
+
+.scoreboard {
+  display: flex;
+  justify-content: space-around;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.stat {
+  flex: 1;
+  text-align: center;
+  padding: 14px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px #173f3510;
+}
+
+.stat span {
+  display: block;
+  font-size: 13px;
+  color: #68776f;
+  margin-bottom: 6px;
+}
+
+.stat strong {
+  font-size: 25px;
+}
+
+#timer {
+  color: #e59a30;
+}
+
+/* ---------- PROGRESS BAR ---------- */
+
+.progress-track {
+  height: 8px;
+  margin-bottom: 18px;
+  background: #d8dfd4;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #e8aa45;
+  transition: width 0.25s ease;
+}
+
+/* ---------- HOUSE SCENE ---------- */
+
+.house {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 7px solid #fffaf0;
+  border-radius: 18px;
+  background: #f2d9a8;
+  box-shadow: 0 8px 25px #173f3520;
+  isolation: isolate;
+}
+
+/* Wall */
+
+.house::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 27% 0;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 49.5%,
+      #ffffff25 50%,
+      transparent 50.5%
+    ),
+    #f4dfb9;
+  z-index: -2;
+}
+
+/* Floor */
+
+.house::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 28%;
+  background: repeating-linear-gradient(
+    0deg,
+    #bd8559 0px,
+    #bd8559 3px,
+    #d39c6b 4px,
+    #d39c6b 35px
+  );
+  z-index: -1;
+}
+
+.room-label {
+  position: absolute;
+  top: 3%;
+  left: 3%;
+  color: #896c4d;
+  font-size: clamp(8px, 1.4vw, 12px);
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+/* Window */
+
+.window {
+  position: absolute;
+  top: 12%;
+  left: 9%;
+  width: 25%;
+  height: 37%;
+  padding: 5px;
+  background: #fffaf0;
+  border: 4px solid #a96f45;
+  box-shadow: 0 3px 5px #6a4b3020;
+}
+
+.window-sky {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 70% 25%, #fff2a5 0 9%, transparent 10%),
+    linear-gradient(#91d3e8 0 65%, #a8c982 66%);
+  border: 3px solid #d8b28a;
+}
+
+/* Wall picture */
+
+.picture {
+  position: absolute;
+  top: 13%;
+  right: 13%;
+  width: 12%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-size: clamp(20px, 4vw, 38px);
+  background: #fff5df;
+  border: 5px solid #aa784d;
+}
+
+/* Shelf */
+
+.shelf {
+  position: absolute;
+  top: 39%;
+  right: 5%;
+  width: 30%;
+  height: 4%;
+  background: #98613d;
+  border: 2px solid #7c4b2e;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: clamp(14px, 3vw, 26px);
+}
+
+.shelf span {
+  transform: translateY(-60%);
+}
+
+/* Sofa */
+
+.sofa {
+  position: absolute;
+  left: 12%;
+  bottom: 19%;
+  width: 43%;
+  height: 29%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background: #648e78;
+  border: 5px solid #416b57;
+  border-radius: 20px 20px 9px 9px;
+  box-shadow: 0 10px 0 #79563a;
+}
+
+.cushion {
+  width: 40%;
+  height: 65%;
+  border-radius: 10px;
+  background: #8db49a;
+  border: 2px solid #507963;
+}
+
+.sofa::before,
+.sofa::after {
+  content: "";
+  position: absolute;
+  bottom: -15%;
+  width: 10%;
+  height: 18%;
+  background: #785237;
+}
+
+.sofa::before {
+  left: 10%;
+}
+
+.sofa::after {
+  right: 10%;
+}
+
+/* Table */
+
+.table {
+  position: absolute;
+  right: 12%;
+  bottom: 19%;
+  width: 25%;
+  height: 8%;
+  display: grid;
+  place-items: center;
+  background: #bb8553;
+  border: 4px solid #8f5d39;
+  border-radius: 8px;
+  font-size: clamp(16px, 3vw, 28px);
+  box-shadow: 0 12px 0 -3px #8f5d39;
+}
+
+/* Plant */
+
+.plant {
+  position: absolute;
+  bottom: 22%;
+  right: 3%;
+  font-size: clamp(24px, 5vw, 44px);
+}
+
+/* Rug */
+
+.rug {
+  position: absolute;
+  bottom: 4%;
+  left: 28%;
+  width: 47%;
+  height: 14%;
+  border-radius: 50%;
+  background: #e8b56e;
+  border: 4px solid #cb9252;
+  z-index: -1;
+}
+
+/* ---------- WATER BOTTLES ---------- */
+
+.bottle {
+  position: absolute;
+  z-index: 2;
+  width: 8%;
+  min-width: 24px;
+  aspect-ratio: 0.72;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: clamp(17px, 3.5vw, 30px);
+  background: #d5f5ff;
+  border: 2px solid #54b8d4;
+  border-radius: 9px 9px 12px 12px;
+  cursor: pointer;
+  filter: drop-shadow(2px 3px 2px #00000025);
+  transition:
+    transform 0.15s ease,
+    opacity 0.2s ease;
+}
+
+.bottle:hover {
+  transform: scale(1.15);
+}
+
+.bottle:focus-visible {
+  outline: 3px solid #e99e31;
+  outline-offset: 3px;
+}
+
+/* Bottle positions */
+
+.bottle-1 {
+  top: 42%;
+  left: 29%;
+}
+
+.bottle-2 {
+  top: 46%;
+  left: 47%;
+}
+
+.bottle-3 {
+  top: 51%;
+  left: 70%;
+}
+
+.bottle-4 {
+  top: 69%;
+  left: 16%;
+}
+
+.bottle-5 {
+  top: 72%;
+  left: 56%;
+}
+
+.bottle-6 {
+  top: 36%;
+  right: 9%;
+}
+
+/* A found bottle disappears */
+
+.bottle.found {
+  opacity: 0;
+  transform: scale(0.4);
+  pointer-events: none;
+}
+
+/* ---------- START AND END OVERLAY ---------- */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: #173f358c;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-card {
+  width: 100%;
+  max-width: 360px;
+  padding: 25px;
+  text-align: center;
+  border-radius: 18px;
+  background: #fffdf7;
+  box-shadow: 0 10px 30px #00000020;
+}
+
+.overlay-card h2 {
+  margin-top: 0;
+  font-size: clamp(21px, 4vw, 30px);
+}
+
+.overlay-card p {
+  color: #586a60;
+  line-height: 1.6;
+}
+
+/* Buttons */
+
+.primary-button {
+  padding: 13px 25px;
+  border: none;
+  border-radius: 30px;
+  background: #e8a33b;
+  color: #173f35;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.primary-button:hover {
+  background: #f2bd62;
+  transform: translateY(-2px);
+}
+
+.primary-button:focus-visible {
+  outline: 3px solid #173f35;
+  outline-offset: 3px;
+}
+
+/* ---------- FEEDBACK AND MISSION ---------- */
+
+.feedback {
+  min-height: 24px;
+  text-align: center;
+  color: #52685b;
+  font-size: 14px;
+  margin: 18px 0;
+}
+
+.mission {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 650px;
+  margin: 28px auto 0;
+  padding: 16px;
+  background: #e8eee3;
+  border-radius: 12px;
+  color: #365a49;
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+.mission p {
+  margin: 0;
+}
+
+.mission-drop {
+  font-size: 28px;
+}
+
+.mission a {
+  color: #176c91;
+  font-weight: bold;
+}
+
+/* ---------- SMALL SCREENS ---------- */
+
+@media (max-width: 500px) {
+  body {
+    padding: 16px 10px;
+  }
+
+  .house {
+    border-width: 4px;
+    border-radius: 12px;
+  }
+
+  .scoreboard {
+    gap: 8px;
+  }
+
+  .stat {
+    padding: 10px;
+  }
+
+  .mission {
+    align-items: flex-start;
+    padding: 12px;
+  }
+}

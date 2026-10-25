@@ -1,13 +1,644 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Charity Water Game</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Water Rush!</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #dff4ff;
+  text-align: center;
+  color: #17324d;
+}
+
+h1 {
+  margin: 12px 0 5px;
+  color: #087fc1;
+}
+
+.instructions {
+  margin: 5px 12px 12px;
+  font-size: 14px;
+}
+
+.hud {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px;
+}
+
+.hud div {
+  background: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px #0002;
+  font-weight: bold;
+}
+
+#timer.danger {
+  color: #e52c40;
+}
+
+#game {
+  position: relative;
+  width: min(900px, 96vw);
+  height: min(520px, 60vh);
+  min-height: 320px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 5px solid #8d5738;
+  border-radius: 14px;
+  background:
+    linear-gradient(to bottom,
+      transparent 0 67%,
+      #c58b59 67% 100%);
+  touch-action: none;
+  user-select: none;
+}
+
+/* Living room background */
+.wall {
+  position: absolute;
+  inset: 0 0 33%;
+  background: linear-gradient(#ffe8c5, #f8d8aa);
+}
+
+.window {
+  position: absolute;
+  top: 9%;
+  left: 7%;
+  width: 23%;
+  height: 35%;
+  background: linear-gradient(#8fe0ff, #e3faff);
+  border: 9px solid #fff6e6;
+  box-shadow: inset 0 0 0 3px #a66d43;
+}
+
+.window::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 47%;
+  width: 6px;
+  background: #fff6e6;
+}
+
+.window::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 48%;
+  height: 6px;
+  background: #fff6e6;
+}
+
+.picture {
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 17%;
+  height: 24%;
+  background: #75c9a1;
+  border: 8px solid #9b603c;
+  display: grid;
+  place-items: center;
+  font-size: clamp(24px, 5vw, 45px);
+}
+
+.sofa {
+  position: absolute;
+  left: 29%;
+  bottom: 22%;
+  width: 44%;
+  height: 24%;
+  background: #e77e72;
+  border: 5px solid #a74f49;
+  border-radius: 18px 18px 8px 8px;
+}
+
+.sofa::before {
+  content: "";
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  top: 20%;
+  height: 55%;
+  border-radius: 12px;
+  background: #f69a8c;
+  border: 3px solid #a74f49;
+}
+
+.sofa::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: -14%;
+  height: 14%;
+  background: #76462f;
+}
+
+.table {
+  position: absolute;
+  right: 6%;
+  bottom: 6%;
+  width: 22%;
+  height: 12%;
+  background: #9b603c;
+  border-radius: 8px;
+  box-shadow: 0 13px 0 -4px #76462f;
+}
+
+.rug {
+  position: absolute;
+  left: 23%;
+  bottom: 3%;
+  width: 55%;
+  height: 18%;
+  background: #edc0a1;
+  border: 4px solid #e9a57b;
+  border-radius: 50%;
+}
+
+#player, .bottle {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  transform: translate(-50%, -50%);
+}
+
+#player {
+  left: 50%;
+  top: 78%;
+  width: 48px;
+  height: 58px;
+  font-size: 39px;
+  filter: drop-shadow(0 3px 2px #0003);
+}
+
+.bottle {
+  width: 36px;
+  height: 45px;
+  font-size: 31px;
+  animation: bob 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes bob {
+  from { margin-top: -3px; }
+  to { margin-top: 3px; }
+}
+
+#message {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background: #15324dcc;
+  color: white;
+}
+
+#message h2 {
+  font-size: clamp(26px, 6vw, 44px);
+  margin: 0 0 10px;
+}
+
+#message p {
+  max-width: 420px;
+  line-height: 1.5;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 20px;
+  margin: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  background: #087fc1;
+  color: white;
+  touch-action: manipulation;
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+button:focus-visible {
+  outline: 3px solid #ffda61;
+  outline-offset: 3px;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 10px auto 20px;
+}
+
+.controls button {
+  width: 58px;
+  height: 52px;
+  font-size: 23px;
+  background: #245b7c;
+}
+
+#feedback {
+  min-height: 22px;
+  font-weight: bold;
+  color: #087fc1;
+}
+
+/* Confetti particles */
+.confetti {
+  position: absolute;
+  z-index: 10;
+  top: -15px;
+  width: 9px;
+  height: 13px;
+  pointer-events: none;
+  animation: fall 2.5s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(600px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  #game {
+    height: 52vh;
+    min-height: 310px;
+  }
+
+  .hud {
+    gap: 6px;
+  }
+
+  .hud div {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .window {
+    border-width: 5px;
+  }
+}
+</style>
 </head>
+
 <body>
-    <h1>Welcome to the Charity Water Game Prototype</h1>
-    <script src="script.js"></script>
+
+<h1>💧 Water Rush!</h1>
+<p class="instructions">
+  Collect every full water bottle before 30 seconds runs out!
+  Avoid empty bottles!
+</p>
+
+<div class="hud">
+  <div>⏱️ Time: <span id="timer">30</span>s</div>
+  <div>⭐ Score: <span id="score">0</span></div>
+  <div>💧 Left: <span id="remaining">8</span></div>
+</div>
+
+<div id="game" aria-label="Interactive living room game">
+  <div class="wall"></div>
+  <div class="window"></div>
+  <div class="picture">🌿</div>
+  <div class="sofa"></div>
+  <div class="rug"></div>
+  <div class="table"></div>
+
+  <div id="player" aria-label="Player">🧍</div>
+
+  <div id="message">
+    <h2>💦 Water Rush!</h2>
+    <p>
+      You're thirsty! Collect all 8 full water bottles.
+      Empty bottles cost you 5 seconds.
+      You have only 30 seconds!
+    </p>
+    <button id="startBtn">Start Game</button>
+  </div>
+</div>
+
+<p id="feedback" role="status" aria-live="polite">
+  Ready? Let's go!
+</p>
+
+<div class="controls" aria-label="Movement controls">
+  <button data-dir="up" aria-label="Move up">⬆️</button>
+</div>
+<div class="controls">
+  <button data-dir="left" aria-label="Move left">⬅️</button>
+  <button data-dir="down" aria-label="Move down">⬇️</button>
+  <button data-dir="right" aria-label="Move right">➡️</button>
+</div>
+
+<script>
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+const timerDisplay = document.getElementById("timer");
+const scoreDisplay = document.getElementById("score");
+const remainingDisplay = document.getElementById("remaining");
+const message = document.getElementById("message");
+const feedback = document.getElementById("feedback");
+const startBtn = document.getElementById("startBtn");
+
+const TOTAL_WATER = 8;
+const START_TIME = 30;
+const PLAYER_SIZE = 44;
+
+let playerX = 50;
+let playerY = 78;
+let score = 0;
+let timeLeft = START_TIME;
+let waterCollected = 0;
+let playing = false;
+let bottles = [];
+let timerInterval = null;
+let lastFrame = 0;
+let animationFrame = null;
+let keys = {};
+let lastTimestamp = 0;
+
+function randomPosition() {
+  // Keep collectibles away from the very edge.
+  return {
+    x: 7 + Math.random() * 86,
+    y: 17 + Math.random() * 72
+  };
+}
+
+function createBottles() {
+  document.querySelectorAll(".bottle").forEach(el => el.remove());
+  bottles = [];
+
+  // Spawn eight full bottles and three empty bottles.
+  for (let i = 0; i < TOTAL_WATER + 3; i++) {
+    const full = i < TOTAL_WATER;
+    const bottle = document.createElement("div");
+    const pos = randomPosition();
+
+    bottle.className = "bottle";
+    bottle.textContent = full ? "💧" : "🧴";
+    bottle.setAttribute(
+      "aria-label",
+      full ? "Full water bottle" : "Empty bottle"
+    );
+
+    bottle.style.left = pos.x + "%";
+    bottle.style.top = pos.y + "%";
+
+    game.appendChild(bottle);
+
+    bottles.push({
+      element: bottle,
+      x: pos.x,
+      y: pos.y,
+      full,
+      collected: false
+    });
+  }
+}
+
+function updatePlayer() {
+  player.style.left = playerX + "%";
+  player.style.top = playerY + "%";
+}
+
+function updateHUD() {
+  timerDisplay.textContent = Math.max(0, timeLeft);
+  timerDisplay.classList.toggle("danger", timeLeft <= 10);
+  scoreDisplay.textContent = score;
+  remainingDisplay.textContent = TOTAL_WATER - waterCollected;
+}
+
+function startGame() {
+  clearInterval(timerInterval);
+  cancelAnimationFrame(animationFrame);
+
+  score = 0;
+  timeLeft = START_TIME;
+  waterCollected = 0;
+  playerX = 50;
+  playerY = 78;
+  keys = {};
+  playing = true;
+
+  updatePlayer();
+  updateHUD();
+  createBottles();
+
+  message.style.display = "none";
+  feedback.textContent = "Go! Collect the water! 💧";
+
+  lastTimestamp = performance.now();
+  animationFrame = requestAnimationFrame(gameLoop);
+
+  timerInterval = setInterval(() => {
+    if (!playing) return;
+
+    timeLeft--;
+    updateHUD();
+
+    if (timeLeft <= 0) {
+      timeLeft = 0;
+      updateHUD();
+      endGame(false);
+    }
+  }, 1000);
+}
+
+function gameLoop(timestamp) {
+  if (!playing) return;
+
+  const delta = Math.min((timestamp - lastTimestamp) / 16.67, 2);
+  lastTimestamp = timestamp;
+
+  const speed = 0.65 * delta;
+
+  if (keys.ArrowUp || keys.w) playerY -= speed;
+  if (keys.ArrowDown || keys.s) playerY += speed;
+  if (keys.ArrowLeft || keys.a) playerX -= speed;
+  if (keys.ArrowRight || keys.d) playerX += speed;
+
+  playerX = Math.max(3, Math.min(97, playerX));
+  playerY = Math.max(9, Math.min(94, playerY));
+
+  updatePlayer();
+  checkCollisions();
+
+  if (playing) {
+    animationFrame = requestAnimationFrame(gameLoop);
+  }
+}
+
+function checkCollisions() {
+  bottles.forEach(bottle => {
+    if (bottle.collected) return;
+
+    // Use pixel distance so collision remains consistent
+    // even when the game container changes size.
+    const gameRect = game.getBoundingClientRect();
+    const dx = (playerX - bottle.x) / 100 * gameRect.width;
+    const dy = (playerY - bottle.y) / 100 * gameRect.height;
+
+    if (Math.hypot(dx, dy) < PLAYER_SIZE) {
+      bottle.collected = true;
+      bottle.element.remove();
+
+      if (bottle.full) {
+        score++;
+        waterCollected++;
+        feedback.textContent = "💧 +1 point! Great job!";
+
+        if (waterCollected === TOTAL_WATER) {
+          updateHUD();
+          endGame(true);
+          return;
+        }
+      } else {
+        timeLeft = Math.max(0, timeLeft - 5);
+        feedback.textContent = "🧴 Empty bottle! -5 seconds!";
+        if (timeLeft <= 0) {
+          updateHUD();
+          endGame(false);
+          return;
+        }
+      }
+
+      updateHUD();
+    }
+  });
+}
+
+function endGame(won) {
+  if (!playing) return;
+
+  playing = false;
+  clearInterval(timerInterval);
+  cancelAnimationFrame(animationFrame);
+  keys = {};
+
+  message.style.display = "flex";
+
+  if (won && timeLeft > 0) {
+    message.innerHTML = `
+      <h2>🎉 YOU WIN! 🎉</h2>
+      <p>You collected all the water with ${timeLeft} seconds left!</p>
+      <p>⭐ Final Score: ${score} / ${TOTAL_WATER}</p>
+      <button id="restartBtn">Play Again</button>
+    `;
+
+    feedback.textContent = "Amazing! All the water is collected! 🥳";
+    confetti();
+  } else {
+    message.innerHTML = `
+      <h2>😵 Time's Up!</h2>
+      <p>You collected ${waterCollected} out of ${TOTAL_WATER} water bottles.</p>
+      <p>⭐ Final Score: ${score} / ${TOTAL_WATER}</p>
+      <button id="restartBtn">Try Again</button>
+    `;
+
+    feedback.textContent = "Oh no! Try again and collect faster!";
+  }
+
+  document.getElementById("restartBtn").addEventListener("click", startGame);
+}
+
+function confetti() {
+  const colors = ["#ff4d6d", "#ffd166", "#06d6a0", "#4cc9f0", "#b388ff"];
+
+  for (let i = 0; i < 100; i++) {
+    const piece = document.createElement("div");
+    piece.className = "confetti";
+    piece.style.left = Math.random() * 100 + "%";
+    piece.style.backgroundColor =
+      colors[Math.floor(Math.random() * colors.length)];
+    piece.style.animationDelay = Math.random() * 1.5 + "s";
+    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+    game.appendChild(piece);
+    setTimeout(() => piece.remove(), 4200);
+  }
+}
+
+// Keyboard controls: arrows or WASD.
+document.addEventListener("keydown", event => {
+  if ([
+    "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "
+  ].includes(event.key)) {
+    event.preventDefault();
+  }
+
+  if (!playing) return;
+
+  keys[event.key] = true;
+  if (event.key.length === 1) {
+    keys[event.key.toLowerCase()] = true;
+  }
+});
+
+document.addEventListener("keyup", event => {
+  keys[event.key] = false;
+  if (event.key.length === 1) {
+    keys[event.key.toLowerCase()] = false;
+  }
+});
+
+// Touch and mouse buttons: hold to move.
+document.querySelectorAll("[data-dir]").forEach(button => {
+  const dir = button.dataset.dir;
+  const keyMap = {
+    up: "ArrowUp",
+    down: "ArrowDown",
+    left: "ArrowLeft",
+    right: "ArrowRight"
+  };
+  const key = keyMap[dir];
+
+  button.addEventListener("pointerdown", event => {
+    event.preventDefault();
+    if (playing) keys[key] = true;
+    button.setPointerCapture(event.pointerId);
+  });
+
+  function release() {
+    keys[key] = false;
+  }
+
+  button.addEventListener("pointerup", release);
+  button.addEventListener("pointercancel", release);
+  button.addEventListener("lostpointercapture", release);
+});
+
+startBtn.addEventListener("click", startGame);
+
+// Clean up held movement if the browser tab loses focus.
+window.addEventListener("blur", () => {
+  keys = {};
+});
+</script>
+
 </body>
 </html>
